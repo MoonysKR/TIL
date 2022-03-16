@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h1>DETAIL</h1>
+  <hr>
+  <p>Title : {{ article.title }}</p>
+  <p>CONTENT : {{ article.content }}</p>
+  <p>CREATED AT : {{ article.created_at }}</p>
+  <p>UPDATED AT: {{ article.uadated_at }}</p>
+  <hr>
+  {% comment %} POST요청은 a 태그로 불가 무적권 form으로 {% endcomment %}
+  <form action="{% url 'articles:delete' article.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Delete">
+  </form>
+  <a href="{% url 'articles:index' %}">back</a>
+{% endblock content %}

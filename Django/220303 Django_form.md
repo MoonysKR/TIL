@@ -1,0 +1,70 @@
+# HTML Form
+
+- HTML "form" element
+  - 웹에서 사용자 정보를 입력하는 여러 방식(txt, btn, checkbox, file, hidden, img, pwd, radio, reset, submit)을 제공하고 사용자로부터 할당된 데이터를 서버로 전송하는 역할을 담당
+  - 핵심 속성(attribute)
+    - action : 입력 데이터가 전송될 URL 지정
+    - method : 입력 데이터 전달 방식 지정
+- HTML "input" element
+  - 사용자로부터 데이터를 입력받기 위해 사용
+  - type 속성에 따라 동작 방식이 달라짐
+  - 핵심 속성(atrribute)
+    - name
+    - 중복가능, 양식을 제출했을 때 name이라는 이름에 설정된 값을 넘겨서 값을 가져올 수 있음
+    - 주요 용도는 GET/POST 방식으로 서버에 전달하는 파라미터(name은 key, value는 value)로 매핑하는 것
+    - Get방식에서는 URL에서 ?key=valur
+
+
+
+---
+
+# URL
+
+- Django URLSs
+
+  - Dispatcher(발송자, 운항 관리자)로서의 URL
+  - 웹애플리케이션은 URL을 통한 클라이언트의 요청에서 부터 시작됨
+
+- Variable Routing
+
+  - URL 주소를 변수로 사용하는 것
+
+  - URL의 일부를 변수로 지정하여 view 함수의 인자로 넘길 수 있음
+
+  - 즉, 변수 값에 따라 하나의 path()에 여러 페이지를 연결 시킬 수 있음
+
+  - (예) 로또 회차별 당첨 페이지(각각의 URL을 만드는게 아니라 회차 정보만 URL내에서 변수화)
+
+  - request인자만을 받아왔는데 추가적으로 변수를 받는 방식
+
+  - ```python
+    path('acocounts/user/<int:user_pk>/', ...)
+    # 타입을 적고 변수명(view함수에서 request와 인자로 들어감)
+    # 들어갈 수 있는 타입 : str, int, slug(하이픈(-)이 들어간 방식)
+    ```
+
+- App URL mapping
+
+  - app의 view함수가 많아지면서 사용하는 path() 또한 많아지고,
+    - app 또한 더 많이 작성되기 때문에 프로젝트의 urls.py에서 모두 관리하는 것은 프로젝트의 유지보수에 좋지 않음
+  - 이제는 `각 app에 urls.py를 작성`하게 됨 
+  - pjt폴더의 url은 admin과 각 어플리케이션으로 이동시켜주는 URL 남김
+  - import에 include 추가 => 어플리케이션으로 연결해주는 함수
+  - django는 `명시적 상대경로` `(from . import ..)`을 권장
+
+---
+
+1. /throw/ url로 요청을 보냄
+2. django의 /throw/ urls.py가 throw view함수를 호출 => throw 템플릿을 응답
+3. throw 템플릿을 응답 받아서 화면을 볼 수 있음   (여기까지가 Throw페이지를 만들고 호출하는 과정)
+4. throw 템플릿에서 form태그를 통해 데이터를 `/catch/`로 submit(제출)  =>데이터를 쓰고 엔터를 누르는 과정
+
+
+
+5. django의 /catch/ urls.py가 catch view 함수를 호출
+6. catch view 함수는 요청 객체의 데이터를 추출
+7. catch view 함수는 추출한 데이터와 함께 catch 템플릿을 응답(렌더링)
+8. 클라이언트는 응답받은 catch 템플릿을 보게 됨
+
+---
+
