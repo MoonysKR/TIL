@@ -174,20 +174,25 @@ class Article(models.Model):
 - READ(가장 중요 - 원하는 데이터를 얼마나 잘 뽑아서 보여줄 수 있는가 // 데이터 사이언티스트의 덕목)
 
   - QuerySet API method를 사용해 다양한 조회를 하는 것이 중요
+
   - QuerySet API method는 크게 2가지로 분류
     1. Methods that `return new querysets`		// 새로운 쿼리셋을 리턴
     2. Methods that `do not return querysets`        // 리턴하지 않음
+    
   - Article.objects.all()
     - 현재 QuerySet의 복사본을 반환
+    
   - get()        // PK와 같이 하나만 존재하는 조회에서 사용해야함.
     - 주어진 lookup매개변수와 일치하는 객체를 반환
     - 객체를 찾을 수 없으면 DoesNotExist 예외를 발생시키고,        // PK가 범위를 벗어난 경우
     - 둘 이상의 객체를 찾으면 MultipleObjectsReturned 예외를 발생 시킴        // PK가 아니라 다른 변수로 조회해서 여러 객체가 조회될 경우
     - 위와 같은 특징을 가지고 있기 떄문에 primary key(PK)와 같이 고유(unique)성을 보장하는 조회에서 사용해야 함
+    
   - filter()        // 여러 매개변수 조회 가능
     - 주어진 lookup 매개변수와 일치하는 객체를 포함하는 새 QuerySet을 반환
     - 조건이 없을 경우 빈 쿼리셋 리턴
-    - 
+    
+    
 
 - CREATE
 
@@ -235,6 +240,7 @@ class Article(models.Model):
     1. 인스턴스에 조회할 내용을 담고    // article = Article.objects.get(pk=1)
     2. 내용을 바꿈    // article.title = 'byebye'
     3. 저장    // article.save()
+  
 - Delete        // 가장 간단한 친구
   - 조회하고 삭제 매서드
     1. 인스턴스에 조회할 내용을 담고    // article = Article.objects.get(pk=1)
@@ -259,8 +265,3 @@ article.save() etc.. != Article.objects.get(pk=1)
   - 예시
     - Article.objects.filter(pk__gt=2)
     - Article.objects.filter(content__contain='ja')
-
-
-
-8. CRUD with views
-
