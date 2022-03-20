@@ -75,7 +75,10 @@ def edit(request, pk):
     context = {
         'article':article
     }
-    return render(request, 'articles/edit.html', context)
+    if request.method == 'POST':
+        return render(request, 'articles/edit.html', context)
+    else:
+        return redirect(request, 'artcles:details', article.pk)
 
 def update(request, pk):
     article = Article.objects.get(pk=pk)

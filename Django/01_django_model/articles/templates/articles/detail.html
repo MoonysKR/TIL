@@ -13,5 +13,9 @@
     {% csrf_token %}
     <input type="submit" value="Delete">
   </form>
+  <form action="{% url 'articles:edit' article.pk %}" method="POST">
+    {% csrf_token %}
+    <input type="submit" value="Edit">
+  </form>
   <a href="{% url 'articles:index' %}">back</a>
 {% endblock content %}
