@@ -2,16 +2,16 @@
 
 ### Django Autentication System
 
-- 장고 인증 시스템은 django.contrib.auth에 Django contrib module로 제공
+- Django 인증 시스템은 django.contrib.auth에 Django contrib module로 제공
 
 - 피수 구성은 settings.py에 이미 포함되어 있으며 INSTALLED_APPS 설정에 나열된 아래 두 항목으로 구성됨
 
   1. django.contrib.auth
-     - 인증 프레임워크의 핵심과 기본 모델을 포함
+     - 인증 프레임워크의 핵심과 기본 Model을 포함
   2. django.contrib.contenttypes
-     - 사용자가 생성한 모델과 권한을 연결할 수 있음
+     - 사용자가 생성한 Model과 권한을 연결할 수 있음
 
-- 장고 인증 시스템은 `인증(Authentications)`과 `권한(Authorization)`부여를 함께 제공(처리)하며, 이러한 기능이 어느정도 결합되어 일반적으로 인증 시스템이라고 함
+- Django 인증 시스템은 `인증(Authentications)`과 `권한(Authorization)`부여를 함께 제공(처리)하며, 이러한 기능이 어느정도 결합되어 일반적으로 인증 시스템이라고 함
 
 - Authentication & Authorization
 
@@ -121,11 +121,11 @@ urlpatterns = [
     2. **Persistent cookies (or Permanent cookies)**
        - Expires 속성에 지정된 날짜 혹은 Max-Age 속성에 지정된 기간이 지나면 삭제
 - Session in Django
-  - 장고의 세션은 미들웨어를 통해 구현됨
-  - 장고는 database-backed sessions 저장 방식을 기본 값으로 사용
+  - Django의 세션은 미들웨어를 통해 구현됨
+  - Django는 database-backed sessions 저장 방식을 기본 값으로 사용
     - [참고] 설정을 통해 cached, file-based, cookie-based 방식으로 변경 가능
-  - 장고는 특정 session id를 포함하는 쿠키를 사용해서 각각의 브라우저와 사이트가 연결된 세션을 알아냄
-    - 세션 정보는 장고 DB의 django_session 테이블에 저장됨
+  - Django는 특정 session id를 포함하는 쿠키를 사용해서 각각의 브라우저와 사이트가 연결된 세션을 알아냄
+    - 세션 정보는 Django DB의 django_session 테이블에 저장됨
   - 모든 것을 세션으로 사용하려고 하면 사용자가 많을 때 서버에 부하가 걸릴 수 있음
 - Authentication System in MIDDLEWARE
   - SessionMiddleware
@@ -134,7 +134,7 @@ urlpatterns = [
     - 세션을 사용하여 사용자를 요청과 연결
 - [참고] MIDDLEWARE (미들웨어)
   - HTTP 요청과 응답 처리 중간에서 작동하는 시스템 (hooks)
-  - 장고는 HTTP 요청이 들어오면 미들웨어를 거쳐 해당 URL에 등록되어 있는 view로 연결해주고, HTTP 응답 역시 미들웨어를 거쳐서 내보냄
+  - Django는 HTTP 요청이 들어오면 미들웨어를 거쳐 해당 URL에 등록되어 있는 view로 연결해주고, HTTP 응답 역시 미들웨어를 거쳐서 내보냄
   - 주로 데이터 관리, 애플리케이션 서비스, 메시징, 인증 및 API 관리를 담당
 
 ---
@@ -152,7 +152,7 @@ urlpatterns = [
     - 현재 세션에 연결하려는 인증된 사용자가 있는 경우(AuthenticationForm을 통과 했을 때) login()함수가 필요
     - 사용자를 로그인하며 view함수에서 사용 됨
     - HttpRequest 객체와 User 객체가 필요
-    - 장고의 session framework를 사용하여 세션에 user의 ID를 저장(== 로그인)
+    - Django의 session framework를 사용하여 세션에 user의 ID를 저장(== 로그인)
 
 ```python
 # accounts/urls.py
@@ -724,7 +724,7 @@ def update(request):
 - CustomUserChangeForm 작성
 
   1. get_user_model()
-  2. User 모델의 fields
+  2. User Model의 fields
 
   ```python
   # accounts/forms.py
@@ -743,9 +743,9 @@ def update(request):
   ```
 
   - get_user_model()
-    - 현재 프로젝트에서 활성화된 사용자 모델(active user model)을 반환
-    - 장고는 User 클래스를 직접 참조하는 대신 django.contrib.auth.get_user_model()을 사용하여 참조해야 한다고 강조
-    - User model 참조에 대한 자세한 내용은 추후 모델 관계 수업에서 다룸
+    - 현재 프로젝트에서 활성화된 사용자 Model(active user model)을 반환
+    - Django는 User 클래스를 직접 참조하는 대신 django.contrib.auth.get_user_model()을 사용하여 참조해야 한다고 강조
+    - User model 참조에 대한 자세한 내용은 추후 Model 관계 수업에서 다룸
 
 - CustomUserChangeForm으로 변경
 
