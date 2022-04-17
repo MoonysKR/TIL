@@ -62,7 +62,8 @@
 3. Models.py 작성
 
 ```python
-from turtle import title
+@articles/models.py
+
 from django.db import models
 # models라는 장고의 내장 모듈내에 Model클래스 활용 예정
 
@@ -101,6 +102,7 @@ class Article(models.Model):
 5. Migrations
 
 - "Django가 model에 생긴 변화를 반영하는 방법"
+
 - Migration(마이그레이션) 실행 및 DB 스키마를 다루기 위한 몇가지 명령어
   - `makemigrations`(필수명령어)
   - `migrate`(필수명령어)
@@ -108,19 +110,35 @@ class Article(models.Model):
   - showmigrations
 
 - Migrations Commands
-  - ($ python manage.py) makemigrations
-    - model을 `변경`한 것에 기반한 새로운 마이그레이션(like 설계도)을 만들 때 사용
-    - `설계도에서 변경(수정, 삭제, 추가)이 생기면 바로 진행`
-  - ($ python manage.py) migrate
-    - 마이그레이션을 DB에 반영하기 위해 사용
-    - 설계도를 실제 DB에 반영하는 과정
-    - 모델에서의 변경 사항들과 DB의 스키마가 동기화를 이룸
-  - ($ python manage.py) sqlmigrate *articles 0001*
-    - 마이그레이션에 대한 SQL구문을 보기 위해 사용
-    - 마이그레이션이 SQL문으로 어떻게 해석되어서 동작할지 미리 확인할 수 있음
-  - ($ python manage.py) showmigrations
-    - 프로젝트 전체의 마이그레이션 상태를 확인하기 위해 사용
-    - 마이그레이션 파일들이 migrate됐는지 안됐는지 여부를 확인할 수 있음
+
+  ```bash
+  $ python manage.py makemigrations
+  ```
+
+  - model을 `변경`한 것에 기반한 새로운 마이그레이션(like 설계도)을 만들 때 사용
+  - `설계도에서 변경(수정, 삭제, 추가)이 생기면 바로 진행`
+
+  ```bash
+  $ python manage.py migrate
+  ```
+
+  - 마이그레이션을 DB에 반영하기 위해 사용
+  - 설계도를 실제 DB에 반영하는 과정
+  - 모델에서의 변경 사항들과 DB의 스키마가 동기화를 이룸
+
+  ```bash
+  $ python manage.py sqlmigrate *articles 0001*
+  ```
+
+  - 마이그레이션에 대한 SQL구문을 보기 위해 사용
+  - 마이그레이션이 SQL문으로 어떻게 해석되어서 동작할지 미리 확인할 수 있음
+
+  ```bash
+  $ python manage.py showmigrations
+  ```
+
+  - 프로젝트 전체의 마이그레이션 상태를 확인하기 위해 사용
+  - 마이그레이션 파일들이 migrate됐는지 안됐는지 여부를 확인할 수 있음
 
 - `반드시 기억해야할 3단계`
 
@@ -133,7 +151,7 @@ class Article(models.Model):
   3. `($ python manage.py) migrate`
      - DB반영(모델과 DB의 동기화)
 
-- DateField(DateTimeField의 부모 클래스, 시간 구조만 빠져있음) 옵션 (시험에 꼭 나옴!!!!)
+- DateField(DateTimeField의 부모 클래스, 시간 구조만 빠져있음) 옵션 `(시험에 꼭 나옴!!!!)`
 
   - auto_now_add
     - 최초 생성일자
@@ -196,35 +214,45 @@ class Article(models.Model):
 
 - CREATE
 
-  - $ python manage.py shell_plus
+  ```bash
+  $ python manage.py shell_plus
+  
+  >>> article = Article()		// 인스턴스 생성
+  
+  >>> article.title = 'first'
+  
+  >>> article.save()
+  ```
 
-  - article = Article()		// 인스턴스 생성
+  ---
 
-  - article.title = 'first'
+  ```bash
+  >>> article = Article(title='second')
+  
+  >>> article.save()
+  ```
 
-  - article.save()
+  ---
 
-  - ---
+  ```bash
+  >>> Article.objects.create(title='third', content='django!!!')		
+  // 욤마는 바로 리턴(create함수에 이미 save()포함)!, 인스턴스 없이 작성
+  ```
 
-    article = Article(title='second')
+  ---
 
-  - article.save()
-
-  - ---
-
-    Article.objects.create(title='third', content='django!!!')		// 욤마는 바로 리턴(create함수에 이미 save()포함)!, 인스턴스 없이 작성
-
-  - ---
-
-    save() method
+  - save() method
 
     - Saving objects
+
     - 객체를 데이터베이스에 저장함
+
     - 데이터 생성 시 save()를 호출하기 전에는 객체의 ID값이 무엇인지 알 수 없음
       - ID값은 Django가 아니라 DB에서 계산되기 때문
+
     - 단순히 모델을 인스턴스화 하는 것은 DB에 영향을 미치지않기 떄문에 반드시 save()가 필요
 
-  - str method
+    - str method
 
   ```python
   def __str__(self):
@@ -235,16 +263,68 @@ class Article(models.Model):
   # 스키마(설계도)를 바꾸는 것이 아니기 때문에 추가해도 변화가 감지되지 않음
   ```
 
+- READ
+
+  - QuerySet API method를 사용해 다양한 조회를 하는 거시 중요
+
+  - QuerySet API mehtod는 크게 2가지로 분류
+
+    1. Methods that `return new querysets`
+    2. methods that `do not return querysets`
+
+  - all()
+
+    - 현재 QuerySet의 복사본을 반환
+
+    ```bash
+    >>> Article.objects.all()
+    ```
+
+  - get()
+
+    - 주어진 lookup 매개변수와 일치하는 객체를 반환
+    - 객체를 찾을 수 없으면 DoesNotExist 예외를 발생시키고, 둘 이상의 객체를 찾으면 MultipleObjectsReturned 예외를 발생 시킴
+    - 위와 같은 특징을 가지고 있기 때문에 primary key와 같이 고유(unique)성을 보장하는 조회에서 사용해야 함
+
+    ```bash
+    >>> articel = Article.objects.get(pk=100)
+    
+    >> Article.objects.get(content='django')
+    // MultipleObjectsReturned 오류 발생 가능성
+    ```
+
+  - filter()
+
+    - 주어진 lookup 매개변수와 일치하는 객체를 포함하믄 새 QuerySet을 반환
+
+    ```bash
+    >>> Article.objects.filter(content='django!')
+    
+    >>> Article.objects.filter(title='first')
+    ```
+
 - Update        // 난이도 측면에서 가장 어려움
+
   - 수정과 삭제의 공통점 == 뭐를..?수정하고 삭제할지 결정 => 조회를 먼저 해야함!
-    1. 인스턴스에 조회할 내용을 담고    // article = Article.objects.get(pk=1)
-    2. 내용을 바꿈    // article.title = 'byebye'
-    3. 저장    // article.save()
-  
+
+    ```bash
+    >>> article = Article.objects.get(pk=1)  // 인스턴스에 조회할 내용을 담고
+    
+    >>> article.title = 'byebye'  // 내용을 바꿈
+    
+    >>> article.save()  // 저장
+    ```
+
 - Delete        // 가장 간단한 친구
-  - 조회하고 삭제 매서드
-    1. 인스턴스에 조회할 내용을 담고    // article = Article.objects.get(pk=1)
-    2. 삭제    // article.delete()
+
+  - QuerySet의 모든 행에 대해 SQL 삭제 쿼리를 수행하고, 삭제된 객체 수와 객체 유형당 삭제 수가 포함된 딕셔너리를 반환
+
+  ```bash
+  >>> article = Article.objects.get(pk=1)  // 인스턴스에 조회할 내용을 담고
+  
+  >>> article.delete()  // 삭제
+  ```
+
   - save()랑 역할이 아예 다른것
   - DB는 기본적으로 삭제된 pk에 대해 재활용하지 않음
     - 1을 삭제하면, 2부터 시작!
@@ -261,7 +341,7 @@ article.save() etc.. != Article.objects.get(pk=1)
 
 - Field lookups
   - 조회 시 특정 검색 조건을 지정
-  - QuerySet매서드 filter(), exclude()*~~filter의 반대~~*, get()에 대한 키워드 인수로 지정됨
+  - QuerySet매서드 filter() , exclude() (*~~filter의 반대~~*) , get()에 대한 키워드 인수로 지정됨
   - 예시
     - Article.objects.filter(pk__gt=2)
     - Article.objects.filter(content__contain='ja')
