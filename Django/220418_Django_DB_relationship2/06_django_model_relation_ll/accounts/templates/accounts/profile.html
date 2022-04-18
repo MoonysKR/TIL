@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>{{ person.username }}님의 프로필</h1>
+
+{% comment %} 중복되는 태그들 변수화 (with로 감싸주기) {% endcomment %}
+{% with followers=person.followers.all followings=person.followings.all %}
+
+<div>
+  {% comment %} 팔로워 : {{ person.followers.all|length }}  / 팔로우 : {{ person.followings.all|length }} {% endcomment %}
+  팔로워 : {{ followers|length }}  / 팔로우 : {{ followings|length }}
+
+</div>
+
+<div>
+{% if user != person %}
+  <form action="{% url 'accounts:follow' person.pk %}" method="POST">
+    {% csrf_token %}
+    {% comment %} {% if user in person.followers.all %} {% endcomment %}
+    {% if user in followers %}
+    <input type="submit" value="UNFOLLOW">
+    {% else %}
+    <input type="submit" value="FOLLOW">
+    {% endif %}
+  </form>
+{% endif %}
+</div>
+
+{% endwith %}
+
+<hr>
+
+{% comment %} 이 사람이 작성한 게시글 목록 {% endcomment %}
+<h2>{{ person.user }}이 작성한 게시글 </h2>
+{% for article in person.article_set.all %}
+  <p>{{ article.title }}</p>
+{% endfor %}
+
+<hr>
+
+{% comment %} 이 사람이 작성한 댓글 목록 {% endcomment %}
+<h2>{{ person.username }}이 작성한 댓글</h2>
+{% for comment in person.comment_set.all %}
+<p>{{ comment.content }}</p>
+{% endfor %}
+
+<hr>
+
+{% comment %} 이 사람이 좋아요를 누른 게시글 목록 {% endcomment %}
+<h2>{{ person.username }}이 좋아요를 누른 게시글</h2>
+{% for article in person.like_articles.all %}
+  <p>{{ article.title }}</p>
+{% endfor %}
+
+<a href="{% url 'articles:index' %}">[BACK]</a>
+
+{% endblock content %}
