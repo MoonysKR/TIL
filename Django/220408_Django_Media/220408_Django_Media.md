@@ -24,7 +24,7 @@
     
     def detail(request, pk):
         # article = Article.objects.get(pk=pk)
-        article = get_object_or_404(Article, pk=pk)
+        article = get_object_or_404(Article, pk=pk)  # <<<<
         context = {
             'article': article,
         }
@@ -33,7 +33,7 @@
     
     def delete(request, pk):
         # article = Article.objects.get(pk=pk)
-        article = get_object_or_404(Article, pk=pk)
+        article = get_object_or_404(Article, pk=pk)  # <<<<
         if request.method == 'POST':
             article.delete()
             return redirect('articles:index')
@@ -44,7 +44,7 @@
     def update(request, pk):
         if request.method == 'POST':
             # article = Article.objects.get(pk=pk)
-            article = get_object_or_404(Article, pk=pk)    
+            article = get_object_or_404(Article, pk=pk)  # <<<<
             form = ArticleForm(request.POST, instance=article)
             if form.is_valid():
                 article = form.save()
@@ -85,40 +85,16 @@
     ```python
     # views.py
     
-    from django.views.decorators.http import require_http_methods
+    from django.views.decorators.http import require_http_methods  # <<<<
     
-    @require_http_methods(['GET', 'POST'])
+    @require_http_methods(['GET', 'POST'])  # <<<<
     def create(request):
-        if request.method == 'POST':
-            form = ArticleForm(request.POST)
-            if form.is_valid():
-                article = form.save()        
-                return redirect('articles:detail', article.pk)
-        else:
-            form = ArticleForm()
-        context = {
-            'form': form
-        }
-        return render(request, 'articles/create.html', context)
+        ...
     
     
-    @require_http_methods(['GET', 'POST'])
+    @require_http_methods(['GET', 'POST'])  # <<<<
     def update(request, pk):
-        if request.method == 'POST':
-            # article = Article.objects.get(pk=pk)
-            article = get_object_or_404(Article, pk=pk)    
-            form = ArticleForm(request.POST, instance=article)
-            if form.is_valid():
-                article = form.save()
-                return redirect('articles:detail', article.pk)
-        else:
-            article = Article.objects.get(pk=pk)
-            form = ArticleForm(instance=article)
-        context = {
-                'article': article,
-                'form': form
-        }
-        return render(request, 'articles/update.html', context)
+        ...
     ```
     
   - require_POST()
@@ -127,9 +103,9 @@
     ```python
     # views.py
     
-    from django.views.decorators.http import require_http_methods, require_POST, require_safe
+    from django.views.decorators.http import require_http_methods, require_POST, require_safe  # <<<<
     
-    @require_POST
+    @require_POST  # <<<<
     def delete(request, pk):
         # article = Article.objects.get(pk=pk)
         article = get_object_or_404(Article, pk=pk)
@@ -149,9 +125,9 @@
     ```python
     # views.py
     
-    from django.views.decorators.http import require_http_methods, require_POST, require_safe
+    from django.views.decorators.http import require_http_methods, require_POST, require_safe  # <<<<
     
-    @require_safe
+    @require_safe  # <<<<
     def detail(request, pk):
         # article = Article.objects.get(pk=pk)
         article = get_object_or_404(Article, pk=pk)
@@ -160,7 +136,7 @@
         }
         return render(request, 'articles/detail.html', context)
     ```
-
+  
 - 결론
 
   - HTTP 요청에 따라 적절한 예외처리 혹은 데코레이터를 사용해 서버를 보호하고 클라이언트에게 정확한 상황을 제공하는 것의 중요성
@@ -183,7 +159,7 @@
     - 이미지 업로드에 사용하는 모델 필드
     - FileField를 상속받는 서브 클래스이기 때문에 FileField의 모든 속성 및 메서드를 사용 가능하며, 더해서 사용자에 의해 어보드 된 객체가 유효한 이미지인지 검사함
     - ImageField 인스턴스는 최대 길이가 100자인 문자열로 DB에 생성되며, max_length 이자를 사용하여 최대 길이를 변경할 수 있음
-    - [주의] 사용하려면 반드시 Pillow 라이브러리가 필요
+    - [주의] 사용하려면 반드시 [Pillow](https://pillow.readthedocs.io/en/latest/) 라이브러리가 필요
     
   - FileField()
     - 파일 업로드에 사용하는 모델 필드
@@ -198,6 +174,8 @@
       - 이미지 필드에 빈 값(빈 문자열)이 허용되도록 설정 (이미지를 선택적으로 업로드 할 수 있도록)
     
     ```python
+    # models.py
+    
     from django.db import models
     
     # Create your models here.
@@ -205,7 +183,7 @@
         title = models.CharField(max_length=10)
         content = models.TextField()
         created_at = models.DateTimeField(auto_now_add=True)
-        updated_at = models.DateTimeField(auto_now=True)
+        updated_at = models.DateTimeField(auto_now=True)  # <<<<
         image = models.ImageField(upload_to='images/', blank=True)
     
         def __str__(self):
@@ -217,10 +195,23 @@
     - 업로드 디렉토리와 파일이름을 설정하는 2가지 방법을 제공
       1. 문자열 값이나 경로 지정
          - 파이썬의 strtime() 형식이 포함될 수 있으며, 이는 파일 업로드 날짜/시간으로 대체됨
+         
+         ```python
+         # models.py
+         
+         class MyModel(models.Model):
+             # MEDIA_ROOT/uploads/ 경로로 파일 업로드
+             upload = models.FileField(uploade_to='uploads/')
+             # or
+             # MEDIA_ROOT/uploads/2022/01/01/ 경로로 파일 업로드
+             upload = models.FileField(upload_to='uploads/%Y/%m/%d/')
+         ```
+         
          - [참고] time 모듈의 strftime()
            - time.strftime(format[, t])
            - 날짜 및 시간 객체를 문자열 표현으로 변환하는데 사용됨
            - 하나이상의 형식화된 코드 입력을 받아 문자열 표현을 반환
+         
       2. 함수 호출
          - 반드시 2개의 인자(instance, filename)를 사용함
            1. instance
@@ -228,6 +219,18 @@
               - 대부분 이 객체는 아직 데이터베이스에 저장되지 않았으므로 PK값이 아직 없을 수 있음
            2. filename
               - 기존 파일에 제공된 파일 이름
+           
+           ```python
+           # models.py
+           
+           def articles_image_path(instance, filename):
+               #'MEDIA_ROOT/image_<pk>/' 경로에 '<filename>' 이름으로 업롣
+               return f'image_{instance.pk}/{filename}'
+           
+           
+           class Article(models.Model):
+               image = models.ImageField(upload_to=articles_image_path)
+           ```
   
   - Model field option -"blank"
   
