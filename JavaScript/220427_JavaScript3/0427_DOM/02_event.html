@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <!-- 1. onclick -->
+  <button onclick="alertMessage()">나를 눌러봐!</button>
+
+  <!-- 2-1. addEventListener -->
+  <button id="my-button">나를 눌러봐2!!</button>
+  <hr>
+
+	<!-- 2-2. addEventListener -->
+  <p id="my-paragraph"></p>
+
+  <form action="#">
+    <label for="my-text-input">내용을 입력하세요.</label>
+    <input id="my-text-input" type="text">
+  </form>
+  <hr>
+
+  <!-- 2-3. addEventListener -->
+  <h2>Change My Color</h2>
+  <label for="change-color-input">원하는 색상을 영어로 입력하세요.</label>
+  <input id="change-color-input"></input>
+  <hr>
+
+  <script>
+    // 1
+    const alertMessage = function () {
+      alert('메롱!!!')
+    }
+
+    // 2-1
+    const myButton = document.querySelector('#my-button')
+    myButton.addEventListener('click', alertMessage)
+
+    // 함수의 return 값이 존재하지 않음으로 undefined
+    // myButton.addEventListener('click', alertMessage())
+    // ===
+    // myButton.addEventListener('click', undefined)
+
+    // 2-2
+    const myTextInput = document.querySelector('#my-text-input')
+    const myP = document.querySelector('#my-paragraph')
+    
+    const ifInputIsComing = function (event) {
+      myP.innerText = event.target.value
+    }
+
+    myTextInput.addEventListener('input', ifInputIsComing)
+    
+    // Arrow Function Refactoring 한다면?
+    // myTextInput.addEventListener('intput', event => myP.innerText = event.target.value)
+
+    // 2-3
+    const h2Tag = document.querySelector('h2')
+
+    const onColorInput = function (event) {
+      const userInput = event.target.value
+      h2Tag.style.color = userInput
+    }
+
+    const colorInput = document.querySelector('#change-color-input')
+
+    colorInput.addEventListener('input', onColorInput)
+
+  </script>
+</body>
+</html>
+
+
