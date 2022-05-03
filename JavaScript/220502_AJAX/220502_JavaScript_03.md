@@ -185,3 +185,180 @@
     2. promise-style
        - Modern Web APIs에서의 새로운 코드 스타일
        - XMLHttpRequest 객체를 사용하는 구조보다 조금 더 현대적인 버전
+
+
+
+---
+
+### Callback function
+
+- Callback function
+  - 다른 함수에 인자로 전달된 함수
+  - 외부 함수 내에서 호출되어 일종의 루틴 또는 작업을 완료함
+  - 동기식, 비동기식 모두 사용됨
+    - 그러나 비동기 작업이 완료된 후 코드 실행을 계속하는데 주로 사용됨
+  - 비동기 작업이 완료된 후 코드 실행을 계속하는데 사용되는 경우를 비동기 콜백(asynchronous callback)이라고 함
+
+
+
+- JS의 함수는 "일급 객체(First Class Object)다."
+  - 일급 객체 (일급 함수)
+    - 다른 객체들에 적용할 수 있느 연산을 모두 지원하는 객체(함수)
+  - 일급 객체의 조건
+    - 인자로 넘길 수 있어야 함
+    - 함수의 반환 값으로 사용할 수 있어야 함
+    - 변수에 할당할 수 있어야 함
+
+
+
+-  Call function 사용 예시 (JavaScript, Python, Django)
+
+<img src="220502_JavaScript_03.assets/image-20220503111305031.png" alt="image-20220503111305031" style="zoom:67%;" />
+
+
+
+- Async callbacks
+  - 백그라운드에서 코드 실행을 시작할 함수를 호출할 때 인자로 지정된 함수
+  - 백그라운드 코드 실행이 끝나면 callback 함수를 호출하여 작업이 완료되었음을 알리거나, 다음 작업을 실핼할 수 있음
+    - 사용예시) addEventListener( )의 두번째 매개 변수
+  - callback 함수를 다른 함수의 인수로 전달할 때, 함수의 참조를 인수로 전달할 뿐이지 즉시 실행되지 않고, 함수의 body에서 "called back"이 됨. 정의된 함수는 때가 되면 callback 함수를 실행하는 역할을 함
+
+
+
+- Why use callback?
+  - callback함수은 명시적인 호출이 아닌 루틴 혹은 action에 의해 호출되는 함수
+  - Django의 경우 "요청이 들어오면", event의 경우 "특정 이벤트가 발생하면"이라는 조건으로 함수를 호출할 수 있었던 건 'Callback function' 개념 때문에 가능
+  - 비동기 로직을 수행할 때 callback 함수는 필수
+    - 명시적인 호출이 아니라 다른 함수의 매개 변수로 전달하여 해당 함수 내에서 특정 시점에 호출
+
+
+
+- callback Hell
+
+  - 순차적인 연쇄 비동기 작업을 처리하기 위해 "callback함수를 호출하고, 그 다음 callback 함수를 호출하고, 또 그 함수의 callback 함수를 호출하고..."의 패턴이 지속저긍로 반복됨
+  - 즉, 여러개의 연쇄 비동기 작업을 할 때 마주하는 상황
+  - 이를 **callback Hell(콜백지옥)**혹은 pyramid of doom(파며르이 피라미드)이라 함
+  - 위와 같은 상황이 벌어질 경우 아래 사항들을 통제하기 어려움
+    - 디버깅
+    - 코드 가독성
+
+  <img src="220502_JavaScript_03.assets/image-20220503111900327.png" alt="image-20220503111900327" style="zoom: 67%;" />
+
+  
+
+- callback Hell 해결하기
+  1. 코드의 깊이를 얕게 유지 (Keep your code shallow)
+  2. 모듈화 (Modularize)
+  3. 모든 단일 오류 처리 (Handle every single error)
+  4. `Promise 콜백 방식 사용 (Promise callbacks)`
+
+
+
+---
+
+### Promise
+
+- Promise object
+  - 비동기 작업의 최종 완료 또는 실패를 나타내는 객체
+    - 미래의 완료 또는 실패와 그 결과 값을 나나탬
+    - 미래의 어떤 상황에 대한 약속
+  - 성공(이행)에 대한 약속
+    - `.then()`
+  - 실패(거절)에 대한 약솔
+    - `.catcha()`
+
+
+
+- Promise methods
+  - `.then(callback)`
+    - 이전 작업(promise)이 성공했을 때(이행했을 때) 수행할 작업을 나타내는 callback 함수
+    - 그리고 각 callback 함수는 이전의 작업의 성공 결과를 인자로 전달받음
+    - 따라서 성공했을 때의 코드를 callback 함수 안에 작성
+  - `.catch()`
+    - then이 하나라도 실패하면(거부 되면) 동작 (동기식의 'try - except' 구문과 유사)
+    - 이전 작업의 실패로 인해 생성된 error 객체는 catch 블록 안에서 사용할 수 있음
+  - 각각의 .then( )블록은 서로 다른 promise를 반환
+    - 즉, .then( )을 여러개 사용(chaining)하여 연쇄적인 작업을 수행할 수 있음
+    - 결국 여러 비동기 작업을 차례대로 수행할 수 있다는 뜻
+  - .then과 .catch 메서드는 모두 promise를 반환하기 때문에 chaining 가능
+  - 주의
+    - `반환값이 반드시 있어야 함`
+    - 없다면 callback 함수가 이전의 promise 결과를 받을 수 없음
+  - `.finally(callback)`
+    - Promise 객체를 반환
+    - 결과와 상관없이 무조건 지정된 callback 함수가 실행
+    - 어떠한 인자도 전달받지 않음
+      - Promise가 성공되었는지 거절되었는지 판단할 수 없기 때문
+    - 무조건 실행되어야 하는 절에서 활용
+      - .then( )과 .catch( ) 블록에서의 코드 중복을 방지
+
+
+
+- callback Hell -> Promise
+
+<img src="220502_JavaScript_03.assets/image-20220503124115646.png" alt="image-20220503124115646" style="zoom:67%;" />
+
+
+
+- Promise가 보장하는 것
+  - Async callback 작성 스타일과 달리 Promise가 보장하는 특징
+    1. callback 함수는 JavaScript의 Event Loop가 현재 실행 중인 Call Stack을 완료하기 이전에는 절대 호출되지 않음
+       - Promise callback 함수는 Event Queue에 배치되는 엄격한 순서로 호출됨
+    2. 비동기 작업이 성공하거나 실패한 뒤에 .then( ) 메서드를 이용하여 추가한 경우에도 1번과 똑같이 동작
+    3. .then( )을 여러번 사용하여 여러개의 callback 함수를 추가할 수 있음 (Chaining)
+       - 각각의 callback은 주어진 순서대로 하나하나 실행하게 됨
+       - Chaining은 Promise의 가장 뛰어난 장점
+
+
+
+---
+
+### Axios
+
+- Axios
+
+  - "Promise based HTTP client for the browser and Node.js"
+
+  - 브라우저를 위한 Promise 기반의 클라이언트
+
+  - 원래는 "XHR"이라는 브라우저 내장 객체를 활용해 AJAX요청을 처리하는데, 이보다 편리한 AJAX요청이 가능하도록 도움을 줌
+
+    - 확장 가능한 인터페이스와 함께 패키지로 사용이 간편한 라이브러리를 제공
+
+  - `.get()`보다는 `axios({})`형태 이용 권장 (나중에 get 말고 다른 메서드 사용하기 위핸)
+
+    <img src="220502_JavaScript_03.assets/image-20220503124648640.png" alt="image-20220503124648640" style="zoom:67%;" />
+
+
+
+- XMLHttpRequest -> Axios 변경
+
+<img src="220502_JavaScript_03.assets/image-20220503124744832.png" alt="image-20220503124744832" style="zoom:67%;" />
+
+
+
+- Axios 예시
+
+<img src="220502_JavaScript_03.assets/image-20220503124822815.png" alt="image-20220503124822815" style="zoom:67%;" />
+
+
+
+---
+
+### [부록] async & await
+
+- async & await
+
+  - 비동기 코드를 작성하는 새로운 방법
+    - ECMAScript 2017 (ES8)에서 등장
+
+  - 기존 Promise 시스템 위에 구축된 syntatic sugar
+    - promise 구조의 then chaining을 제거
+      - 비동기 코드를 조금 더 동기 코드처럼 표현
+      - **Syntatic sugar**
+        - 더 쉽게 읽고 표현할 수 있도록 설계된 프로그래밍 언어 내의 구문
+        - 즉, 문법적 기능은 그대로 유지하되 사용자가 직관적으로 코드를 읽을 수 있게 만듦
+
+- Promise -> async & await 적용
+
+<img src="220502_JavaScript_03.assets/image-20220503125310825.png" alt="image-20220503125310825" style="zoom:67%;" />
