@@ -18,18 +18,43 @@
 <body>
   <div id="app">
     <!-- 속성 바인딩 -->
+    <img v-bind:src="imageSrc" :alt="altMsg">
+    <img :src="imageSrc" alt="">
 
     <hr>
 
     <!-- 클래스 바인딩 -->
+    <!-- 필요하면 나중에 찾으면서 해결하면 됨. -->
+    <div :class="{ active: isRed }">
+      class binding
+    </div>
+
+    <h3 :class="[activeRed, myBackground]">
+      hello vue
+    </h3>
 
     <hr>
 
     <!-- 스타일 바인딩 -->
+    <p :style="{ fontSize: fontSize + 'px' }">
+      this is paragraph
+    </p>
   </div>
   
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        imageSrc: 'https://picsum.photos/200/300/',
+        altMsg: 'this is image',
+        isRed: true,
+        activeRed: 'active',
+        myBackground: 'my-background-color',
+        fontSize: 30,
+
+      }
+    })
   </script>
 </body>
 </html>

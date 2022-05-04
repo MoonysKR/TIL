@@ -8,10 +8,47 @@
 </head>
 <body>
   <div id="app">
+    <div>
+      <input type="text" v-model="message">
+    </div>
+    {{ other }} <- 요놈 바꾸면 methods는 반응, computed는 무반응
+    <p>OG: <strong>{{ message }}</strong></p>
+    <p>Reverse by Method: <strong>{{ reverseMessage() }}</strong></p>
+    <p>Reverse by computed: <strong>{{ reversedMessage }}</strong></p>
   </div>
   
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        sessionId: 'asdf',
+        message: 'OG',
+        other: 'asdf'
+      },
+      methods: {
+        // 함수로 인식된다. 값이 아님
+        // other가 변해도 반응함
+        // data를 바꾸는 로직들이 주로 methods (setter 함수들)
+        reverseMessage() {
+          console.log('ㅠㅠㅠ')
+          return this.message.split('').reverse().join('')
+        },
+      },
+      computed: {
+        // (data에 의존하는) 계산된 값
+        // 함수가 아니라 값의 형태로 존재
+        // other가 변해도 반응 안함
+        // return 값이 필요하면 computed , data를 통해 값을 얻을 때 computed (getter 함수들)
+        reversedMessage() {
+          console.log('executed')
+          return this.message.split('').reverse().join('')
+        },
+        isLoggedIn() {
+          return this.sessionId ? true : false
+        }
+      }
+    })
   </script>
 </body>
 </html>

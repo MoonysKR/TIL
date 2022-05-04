@@ -9,6 +9,7 @@
 <body>
   <div id="app">
     <img v-if="imgSrc" :src="imgSrc" alt="sample img">
+    <button @click="getImg">GetDog</button>
   </div>
   
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
@@ -28,6 +29,11 @@
             })
         }
       },
+      // 외부 API에서 초기 데이터 받아오기
+      created: function () {
+        this.getImg()
+        console.log('Created! but not before mounted..')
+      }
     })
   </script>
 </body>

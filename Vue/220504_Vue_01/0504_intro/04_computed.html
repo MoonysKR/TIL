@@ -8,10 +8,28 @@
 </head>
 <body>
   <div id="app">
+    <input type="text" v-model="r">
+    <p>{{ r }}</p>
+    <p>{{ area }}</p>
+    <p>{{ perim }}</p>
   </div>
   
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        r: 2,
+      },
+      coputed: {
+        area: function () {
+          return this.r ** 2 * 3.14
+        },
+        perim: function () {
+          return this.r * 2 * 3.14
+        }
+      }
+    })
   </script>
 </body>
 </html>
