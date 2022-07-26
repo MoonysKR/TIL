@@ -2,11 +2,13 @@
 
 [toc]
 
----
 
-### 안된점들😢
 
----
+## 안된점들😢
+
+### FE🌄
+
+#### CSS
 
 ##### div 태그에 span태그를 수평 중앙정렬🎈
 
@@ -103,3 +105,67 @@
 
 ---
 
+##### 배경 이미지 투명도 조절🧨
+
+```css
+<style scoped>
+.profile {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('@/assets/ProfileView/background_img.jpg');
+  background-size: cover;
+  height: 1117px;
+}
+</style>
+```
+
+- 기능
+  - 배경 `이미지만` 투명으로 설정하고 싶다!
+  - **opacity로 조절하면 글자도 투명해짐...ㅠㅠ**
+
+
+
+---
+
+#### Vue.js
+
+##### v-on click을 활용해 렌더링되는 화면 교체하기🎇
+
+```vue
+<template>
+  ...
+  <span @click="changeMyleaf82">
+      내 잎팔이 글
+  </span>
+  ...
+</template>
+<script>
+export default {
+  name: 'ProfileDetail',
+  data() {
+    return {
+      myleaf82: false,
+    }
+  },
+  methods: {
+    changeMyleaf82() {
+      this.myleaf82 = !this.myleaf82
+    },
+  }
+}    
+</script>
+```
+
+- 기능
+  - 버튼 클릭시 관련 정보 보여주기
+    - 로그인 및 회원정보 수정 | 내가 등록한 게시글 
+
+- 포인트
+  1. 보여줄 화면을 인식하는 값(myleaf82)을 데이터에 저장
+  2. methods에 그 값을 변경해주는 changeMyleaf82() 함수 지정
+     - ~~method~~ --> methods...
+  3. 클릭시 이동시켜줄 span 태그 지정
+
+
+
+---
+
+### BE🌅
