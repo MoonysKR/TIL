@@ -125,6 +125,34 @@
 
 ---
 
+##### input[type="file"] 커스터마이징🎉
+
+```vue
+<template>
+  ...
+  <div class="profile-pic d-flex justify-content-center">
+    <label for="pic-file">
+      <span class="material-symbols-outlined">
+        photo_camera
+   	  </span>
+      <span>
+        사진 변경하기
+      </span>
+    </label>
+      <input type="file" id="pic-file">
+    </div>
+  ...
+</template>
+```
+
+- 기능
+  - 기존 멋없는 input 태그가 없어지고,
+  - label로 묶인 항목이 표시됨
+
+
+
+---
+
 #### Vue.js
 
 ##### v-on click을 활용해 렌더링되는 화면 교체하기🎇
