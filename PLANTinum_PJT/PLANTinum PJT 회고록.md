@@ -125,38 +125,11 @@
 
 ---
 
-<<<<<<< HEAD
-##### 이미지 잘라서 원형으로 만들기✨
-=======
 ##### input[type="file"] 커스터마이징🎉
->>>>>>> 37324b33f8c9fddfafdeaa118dd7712b06f29f04
 
 ```vue
 <template>
   ...
-<<<<<<< HEAD
-  <div class="profile-img-box">
-    <img src="@/assets/ProfileView/background_img.jpg" alt="temporary img" class="profile-img">
-  </div>
-  ...
-</template>
-...
-<style scoped>
-.profile-img-box {
-  position: relative;
-  overflow: hidden;
-  border-radius: 50%;
-}
-
-.profile-img {
-  height: 12rem;
-  width: 12rem;
-  object-fit: cover;
-}
-</style>
-```
-
-=======
   <div class="profile-pic d-flex justify-content-center">
     <label for="pic-file">
       <span class="material-symbols-outlined">
@@ -176,7 +149,6 @@
   - 기존 멋없는 input 태그가 없어지고,
   - label로 묶인 항목이 표시됨
 
->>>>>>> 37324b33f8c9fddfafdeaa118dd7712b06f29f04
 
 
 ---
@@ -208,7 +180,6 @@ export default {
   }
 }    
 </script>
-...
 ```
 
 - 기능
@@ -225,7 +196,7 @@ export default {
 
 ---
 
-##### vuex 관리하기(로그인 , 로그아웃 사이클)🎉
+##### vuex 관리하기(로그인 , 로그아웃 사이클)🎃
 
 ```js
 import router from '@/router'
@@ -383,6 +354,14 @@ export const Account = {
      1. 위와 같은 형태
   6. router.push를 통해 home이름을 가진 라우터로 이동시킴(로그인 후 홈화면 이동)
   7. 에러가 발생했다면 어스에러 실행...
+
+---
+
+##### 로그인시 로그인, 회원 정보 vuex store에 저장하여 유지하고 로그아웃시 삭제🎊
+
+- App.vue(가장 상위항목에서 실행)
+  - 하위항목에서 항상 차있음
+- logout actions를 실행하면서 resetToken과 resetCurrentUser, resetProfile을 실행하여 store에서 삭제
 
 
 
