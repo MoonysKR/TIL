@@ -125,11 +125,16 @@
 
 ---
 
+<<<<<<< HEAD
 ##### 이미지 잘라서 원형으로 만들기✨
+=======
+##### input[type="file"] 커스터마이징🎉
+>>>>>>> 37324b33f8c9fddfafdeaa118dd7712b06f29f04
 
 ```vue
 <template>
   ...
+<<<<<<< HEAD
   <div class="profile-img-box">
     <img src="@/assets/ProfileView/background_img.jpg" alt="temporary img" class="profile-img">
   </div>
@@ -151,6 +156,27 @@
 </style>
 ```
 
+=======
+  <div class="profile-pic d-flex justify-content-center">
+    <label for="pic-file">
+      <span class="material-symbols-outlined">
+        photo_camera
+   	  </span>
+      <span>
+        사진 변경하기
+      </span>
+    </label>
+      <input type="file" id="pic-file">
+    </div>
+  ...
+</template>
+```
+
+- 기능
+  - 기존 멋없는 input 태그가 없어지고,
+  - label로 묶인 항목이 표시됨
+
+>>>>>>> 37324b33f8c9fddfafdeaa118dd7712b06f29f04
 
 
 ---
