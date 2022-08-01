@@ -367,4 +367,59 @@ export const Account = {
 
 ---
 
+##### Vue.js에서 다음 주소찾기 api 활용하기🎄
+
+```vue
+<template>
+...
+  <div class="card-text pb-5">
+    <input type="text" class="card-input mx-4" v-model="info.addr" id="sample6_address">
+    <input type="text" class="card-input mx-4" v-model="info.zip_code" id="sample6_postcode">
+    <input type="button" @click="findAddr" value="주소찾기">
+  </div>
+...
+</template>
+
+<script>
+...
+
+  methods: {
+    findAddr() {
+      new window.daum.Postcode({
+          oncomplete: (data) => {
+                // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+              if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                  this.info.addr = data.roadAddress;
+              } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                  this.info.addr = data.jibunAddress;
+              }
+              this.info.zip_code = data.zonecode
+
+                // 우편번호와 주소 정보를 해당 필드에 넣는다.
+              document.getElementById('sample6_postcode').value = data.zonecode;
+              document.getElementById("sample6_address").value = this.info.addr;
+          }
+      }).open();
+  }
+
+...
+</script>
+```
+
+- 기능
+  - 주소찾기 버튼 클릭시 주소 검색 팝업창 오픈
+  - 검색 후 선택한 주소 input 태그로 불러오기
+  - v-model로 연동하여 연결
+
+
+
+- 포인트
+  - [다음 주소 검색 api](https://postcode.map.daum.net/guide) ... 친절하게 설명 됨
+  - this. 을 사용하기 위해
+    - `oncomplete: function(data) {...}`을 `oncomplete:(data) => {...}`으로 변경
+
+---
+
 ### BE🌅
