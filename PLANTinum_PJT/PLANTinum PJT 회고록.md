@@ -420,6 +420,19 @@ export const Account = {
   - this. 을 사용하기 위해
     - `oncomplete: function(data) {...}`을 `oncomplete:(data) => {...}`으로 변경
 
+
+
+---
+
+##### vue router에 params 적용시 발생하는 `Uncaught (in promise) Error: Missing required param "username"` 해결하기
+
+- 문제 발생 포인트
+
+  ```js
+  ```
+
+  
+
 ---
 
 ### BE🌅
