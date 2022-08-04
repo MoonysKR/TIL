@@ -424,14 +424,78 @@ export const Account = {
 
 ---
 
-##### vue router에 params 적용시 발생하는 `Uncaught (in promise) Error: Missing required param "username"` 해결하기
+##### vue router에 params 적용시 발생하는 `Uncaught (in promise) Error: Missing required param "username"` 해결하기🎋
 
 - 문제 발생 포인트
 
-  ```js
-  ```
-
+  - router-link를 사용할 때 params로 getters에 저장된 currentUser.username을 전송하려 했음
+    - 개발자 도구 vue-devtools에는 currentUser가 채워져있음...
+  - 하지만 DOM이 그려질 때 이를 받아오는 것보다 탭이 먼저 렌더링되어 에러 발생
+  - created, mounted, watch 등 여러 수단을 써보았지만 해결 안됨
+  - `console.log() 찍으면 2회가 찍히는데 처음엔 undefined 다음엔 username이 정확하게 찍힘`
+    - 이를 통해 '두 번' 불러와지고 그 사이에 오류가 뜨는구나 유추
   
+- 해결 방법
+
+  - v-if 문을 걸어서 username이 존재하는지 여부를 판단하고 router-link를 렌더링하는 방식을 채택
+
+    ```vue
+    <template>
+      ...
+        <div class="new-box" v-if="!!username">
+          <router-link :to="{ name: 'myplant', params: { username } }">
+              <button class="btn">내 식물</button>
+          </router-link>
+        </div>
+      ...
+    </template>
+    ```
+
+
+
+
+---
+
+##### select tag에서 값(option)이 선택되었을 때 서버로 요청보내기(@change 핸들러 사용)🎍
+
+```vue
+<template>
+  <select class="sido mr-1" @change="beforeFetchSigungu($event)">
+    <option selected>지역을 선택해주세요</option>
+    <option v-for="(loc) in sido" :key="loc.pk" :value="loc.sido">{{ loc.sido }}</option>
+  </select>
+</template>
+
+<script>
+...    
+  data() {
+    return {
+      info: {
+          sido = ''
+      }  
+    }
+  } 
+...
+  methods: {
+    beforeFetchSigungu(event) {
+      const sido = event.target.value
+      this.info.sido = sido
+    },      
+  },
+...      
+</script>
+```
+
+- 기능
+  - 주소를 검색할 때 드랍박스에서 지역(시, 도)을 선택하고, 동네(시, 군, 구)를 고르는 형식
+  - 고를 때마다 data의 info에 담아주어 나중에 요청을 보낼 예정
+- 포인트
+  - select 태그의 option은 @click이 먹히지 않는다...
+    - 처음에 이 방식으로 시도했으나 함수자체가 실행이 되지않아 당황
+  - change 핸들러를 통해 event를 받아오고
+  - console.log를 찍어가며 어디에 원하는 데이터가 있는지 파악해야 함
+
+
 
 ---
 
