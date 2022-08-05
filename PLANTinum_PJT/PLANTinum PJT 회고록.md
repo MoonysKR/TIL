@@ -499,4 +499,82 @@ export const Account = {
 
 ---
 
+##### script에서 store로 dispatch(함수) 실행 시 데이터 넘길 때 주의사항🎎
+
+- 데이터는 객체 형태로 넘겨야 한다!
+
+  - 파이썬처럼 중괄호로 감싸면 객체로 인식하지 않음
+  - 따로 변수에 할당하기
+
+- 잘못된 예시들
+
+  ```vue
+  <script>
+  export default {
+    data() {
+      retrun {
+        info: {
+          ...블라블라
+        }
+      }
+    }
+    ...
+    methods: {
+      ...
+      beforeUpdateLeaf82(credentials) {
+          ...
+          this.updateLeaf82(credentials, this.info)
+      // credentials는 template에서 받는 값, this.info는 data 에 저장된 값
+      }
+    },
+  </script>
+  ```
+
+  ```vue
+  <script>
+  export default {
+    data() {
+      retrun {
+        info: {
+          ...블라블라
+        }
+      }
+    }
+    ...
+    methods: {
+      ...
+      beforeUpdateLeaf82(credentials) {
+          ...
+          this.updateLeaf82({credentials, this.info})
+      // credentials는 template에서 받는 값, this.info는 data 에 저장된 값
+      // 중괄호 해봤자 넘어가서 어차피 객체로 인식못함  
+      }
+    },
+  </script>
+  ```
+
+- 좋은 예시
+
+  ```vue
+  <script>
+  export default {
+    ...
+    methods: {
+      ...
+      beforeUpdateLeaf82(credentials) {
+          ...
+          const updateInfo = {
+            credentials,
+            info: this.info
+          }
+          this.updateLeaf82(updateInfo)
+      }
+    },
+  </script>
+  ```
+
+
+
+---
+
 ### BE🌅
