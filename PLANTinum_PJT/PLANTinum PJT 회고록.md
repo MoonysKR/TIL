@@ -8,6 +8,95 @@
 
 ### FE🌄
 
+#### Javascript
+
+##### 반복문(for) 복습하기🎏
+
+- for
+
+  - 세미콜론(;)으로 구분되는 세 부분으로 구성
+
+    - initialization
+      - 최초 반복문 진입 시 1회만 실행되는 부분
+
+    - condition
+      - 매 반복 시행 전 평가되는 부분
+
+  - expression
+    - 매 반복 시행 이후 평가되는 부분
+
+  ```javascript
+  for (initialization; condition; expression) {
+      // do something
+  }
+  
+  // 예시
+  for (let i = 0; i < 6; i++) {
+      console.log(i)
+  }
+  
+  
+  ```
+
+- for ... in
+
+  - `객체(object)의 속성(key)`들을 순회할 때 사용
+  - 배열도 순회 가능하지만 `권장하지 않음`
+  - 시행할 코드는 중괄호 안에 작성
+  - 블록스코프 생성
+
+  ```javascript
+  for (variable in object) {
+      // do something
+  }
+  
+  // 예시
+  const capitals = {
+      korea: 'seoul'
+      france: 'paris'
+      USA: 'washigton D.C.'
+  }
+  
+  for (let capital in capitals) {
+      console.log(capital)  // korea, france, USA
+  }
+  ```
+
+- for ... of
+
+  - `반복가능한(iterable) 객체`를 순회하며 값을 꺼낼 때 사용
+  - 실행할 코드는 중괄호 안에 작성
+  - 블록스코프 생성
+
+  ```javascript
+  for (variable of iterables) {
+      // do something
+  }
+  
+  // 예시
+  
+  const fruits = ['딸기', '바나나', '메론']
+  
+  for (let fruit of fruits) {
+      fruit = fruit + '!'
+      console.log(fruit)
+  }
+  
+  for (const fruit of fruits) {
+      // fruit 재할당 불가
+      console.log(fruit)
+  }
+  ```
+
+- (참고) for ... in VS for ... of
+
+  - for ... in (객체 순회 적합)
+  - for ... of (배열 순회 적합)
+
+
+
+---
+
 #### CSS
 
 ##### div 태그에 span태그를 수평 중앙정렬🎈
