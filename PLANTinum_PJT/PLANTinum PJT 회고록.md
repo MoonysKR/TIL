@@ -242,6 +242,58 @@
 
 ---
 
+##### search-bar 검색버튼 input tag 안에 들어간 것 같은 효과 주기🎐
+
+```vue
+<template>
+...
+  <div class="search-box col-sm-8 col-md-4 col-12 d-flex justify-content-center">
+    <input class="search-input" type="text" v-model="info.plantname" placeholder="식물명을 입력해주세요" @keyup.enter="beforeSearch()">        
+    <button class="search-btn" type="submit" @click="beforeSearch()">
+      <span class="material-symbols-outlined d-flex align-items-center justify-content-center">search</span>
+    </button>
+  </div>
+...
+</template>
+
+<style>
+.search-box {
+  position: relative;
+  border-radius: 0.5rem;
+  box-shadow: 0rem 0rem 1rem #d2d2d2;
+}
+
+.search-input {
+  width: 90%;
+  height: 2.5rem;
+  border: 0;
+  border-top-left-radius: 0.5rem;
+  border-bottom-left-radius: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.search-btn {
+  width: 10%;
+  border: 0;
+  background-color: white;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  color: black;
+}
+</style>
+```
+
+- 효과
+  - 서치바에 그림자를 두어 입체감 주기
+    - 최상단 div에 주고 싶은 border-radius와 box-shadow  입력
+  - 인풋 좌측만 border-radius
+  - 버튼 우측만 border-radius
+  - 버튼 배경 색 white로 변경
+
+
+
+---
+
 #### Vue.js
 
 ##### v-on click을 활용해 렌더링되는 화면 교체하기🎇
@@ -661,6 +713,81 @@ export const Account = {
     },
   </script>
   ```
+
+
+
+---
+
+##### vuex를 사용할 때 created를해도 getters를 받아오지 못할 때 해결법(`watch  사용`)🎑
+
+```vue
+<script>
+import { mapGetters , mapActions } from 'vuex'
+
+export default {
+  name: 'Leaf82Detail',
+  data() {
+    return {
+      user: {
+      },
+      addr: {
+      },
+      info: {
+        id: null,
+        user: {
+          nickname: '',
+          photo: '',
+          pk: null,
+          username: '',
+        },
+        addr: {
+          id: null,
+          sido: '',
+          sigungu: '',
+        },
+        plantname: '',
+        photo: '',
+        created_at: '',
+        content: '',
+        price: '',
+        category_class: '',
+        status_class: '',
+        posting_addr: null
+      },
+      deleteInfo: {
+        username: this.$route.params.username,
+        posting_addr: this.$route.params.posting_addr
+      }
+    }
+  },
+  methods: {
+    ...mapActions(['deleteLeaf82']),
+    fillData() {
+      this.user = this.leaf82Detail.user
+      this.addr = this.leaf82Detail.addr
+      this.info = this.leaf82Detail
+      this.info.price = this.info.price.toLocaleString('ko-KR')
+    }
+  },
+  computed: {
+    ...mapGetters(['leaf82Detail', 'currentUser']),
+  },
+  watch: {
+    leaf82Detail() {
+      this.fillData()
+    }
+  }
+}
+</script>
+```
+
+- 발생한 에러
+  - created때 상위components에서 fetchLeaf82Detail actions를 호출해 getters의  leaf82Detail을 채워줬으나, 받지 못함..
+  - 콘솔창에 오류 발생, 렌더링 하면 데이터 날라감
+- 해결책
+  - `watch`
+    - getters의 leaf82Detail값을 쳐다보고 있다가 변화가 발생하면,
+    - data에 준비한 값을 채우고 그 값을 이용해 template에 띄어주는 방식
 
 
 
