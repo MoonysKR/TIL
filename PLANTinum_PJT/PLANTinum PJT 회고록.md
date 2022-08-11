@@ -793,7 +793,98 @@ export default {
 
 ---
 
-##### socket.io를 활용해서 채팅 구현하기🧧
+##### socket.io를 활용해서 채팅 구현하기🧧(미완성)
+
+
+
+---
+
+##### 이미지 업로드 시 보내고 받는 방법🎀
+
+- 기능
+  - 사진이 업로드 되기 전에는 기본이미지 보여주기
+    - 최초에는 S3에서 생성된 url을 초기값으로 설정
+  - 사진이 업로드 되면서 blob url 생성 후 대체 이미지 보여주기
+    - 이미지와 글 클릭하면 파일 첨부 기능(라벨로 묶자)
+    - 미리보기 변수가 필요하겠다!
+  - 사진 백엔드로 보내기
+    - 백엔드에서 S3로 파일 변환 후 이미지 url 저장
+  
+- 코드
+
+  ```vue
+  <template>
+  ...
+    <div class="left">
+      <div class="img-box d-flex justify-content-center">
+        <img :src="preview" alt="등록될 사진입니다.">
+      </div>
+      <div class="img-add-box d-flex justify-content-center pt-2">
+        <label for="pic-file" class="img-add mb-0">
+          <span class="material-symbols-outlined">
+            photo_camera
+          </span>
+          <span>
+            사진 변경하기
+          </span>
+        </label>
+        <input type="file" id="pic-file" @change="onInputImage()" accept="image/*" ref="leaf82Image">
+      </div>
+    </div>
+  </template>
+  
+  <script>
+  import { mapActions , mapGetters } from 'vuex'
+  
+  export default {
+    name: 'Leaf82NewForm',
+    data() {
+      return {
+        credentials: {
+          // 사진을 담아 보낼 변수 photo
+          photo: '',
+          ...
+        },
+        // 이미지 미리보기를 위한 변수
+        // 디폴트는 백에서 S3로 생성한 이미지 url
+        // 밑에서 첨부된 사진이 바뀔 때 이미지 url을 만들어 바꿔줄 예정
+        preview: 'https://plantinum.s3.ap-northeast-2.amazonaws.com/static/monstera.jpg'
+      }
+    },
+    methods: {
+      ...mapActions(['fetchSido', 'fetchSigungu', 'createLeaf82']),
+      ...
+      beforecreateLeaf82(credentials) {
+        if (credentials.plantname === '') {
+          alert('이름을 입력해주세요.')
+        } else if (credentials.price === '' || !Number.isInteger(parseInt(credentials.price))) {
+          alert('가격을 확인해주세요.')
+        } else if (credentials.sigungu === '') {
+          alert('주소를 선택해주세요.')
+        } else if (credentials.content === '') {
+          alert('식물을 소개해주세요')
+        } else {
+          this.createLeaf82(credentials)
+        }
+      },
+      onInputImage() {
+        // data 값에 있는 photo 변수를 ref를 통해 이미지 파일에 접근
+        this.credentials.photo = this.$refs.leaf82Image.files[0]
+        // 임시 이미지 url 생성 (blob으로 없어지는 임시 데이터)
+        const url = URL.createObjectURL(this.credentials.photo)
+        // 이미지를 로드해주는 preview 변수에 담아줌
+        this.preview = url
+      },
+    },
+    ...
+  }
+  </script>
+  ```
+  
+- 포인트
+
+  - 이미지 미리보기 url 만들기 : `URL.createObjectURL(사진 파일)`
+  - 이미지 미리보기를 위한 data 값 지정 : `preview`
 
 
 
