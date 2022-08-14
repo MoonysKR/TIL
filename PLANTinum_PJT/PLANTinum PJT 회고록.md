@@ -117,7 +117,33 @@ Number.isInteger(parseInt(a))  //true
     - 최대 가격이 정해져있을 때 최대값 넘는지 판별
     - 숫자 판별 후 문자열이면 alert로 '숫자만 입력가능합니다.' 띄어주기
 
-    
+
+
+
+---
+
+##### 객체(Object)에서 속성 제거(delete)🎗
+
+```javascript
+var sampleObject = {
+    id : '12345',
+    plantname : 'flower',
+    price : '10000'
+}
+
+console.log(sampleObject)
+// {id: '12345', plantname: 'flower', price: '10000'}
+
+delete sampleObject.price
+console.log(sampleObject)
+// {id: '12345', plantname: 'flower'}
+```
+
+- 사용처
+  - 검색할 때 data 값에 빈 문자열이나 null 값을 넣는데, api를 이용할 때에 빈 값은 채워 넣지 않음
+  - 빈 값을 제거하고 params에 할당하여 넘김
+
+
 
 ---
 
