@@ -945,4 +945,117 @@ export default {
 
 ---
 
+##### router-link로 이동할 때 스크롤 위치 최상단으로 이동하기(기본값으로는 스크롤 위치로 이동)🎞
+
+```js
+// src/router/index.js
+
+// 함수 추가 전
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
+});
+
+
+// 함수 추가 후
+const router = createRouter({
+  history: createWebHistory(process.env.BASE_URL),
+  routes,
+  scrollBehavior(){
+    return { top: 0 }
+  },
+});
+```
+
+- 문제점
+  - 스크롤이 내려가 있는 상태에서 라우터를 통해 다른 페이지로 이동
+    - 스크롤 위치가 그대로 페이지가 바뀜
+- 해결
+  - 페이지 이동 시 스크롤이 최상단으로 올라감
+
+
+
+---
+
+##### viewport 너비를 기준으로 화면 스타일 적용🎟
+
+- 기능
+  - 휴대폰 사이즈일때 배경 이미지 변경
+
+```vue
+<template>
+<div class="boxes">
+    <!-- first box를 바인딩해서 조건에따라 값을 변경 -->
+    <div :class="firstBox">
+      ...
+    </div>
+    ...
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'HomeView',
+  data() {
+    return {
+      // 초기 너비는 윈도우의 이너 너비
+      width: window.innerWidth,
+      // 기본값으로는 'first-box' 설정
+      firstBox: 'first-box',
+    }
+  },
+  methods: {
+    // 현재 너비를 수정해줄 함수
+    handleResize() {
+      this.width = window.innerWidth;
+    },
+    // 너비값이 바뀔 때마다 실행시켜줄 함수
+    mobileOrPc() {
+      if (this.width <= 576) {
+        this.firstBox = 'first-box-mobile'
+      } else {
+        this.firstBox = 'first-box'
+      }
+    },
+  },
+  // 시작화면이 모바일인지 피씨인지 판별하기위해 초기 설정
+  created() {
+    this.mobileOrPc()
+  },
+  // 마운티드에 설정
+  mounted() {
+    window.addEventListener('resize', this.handleResize);
+	},
+  // 비포언마운트에 설정
+  beforeUnmount() {
+    window.removeEventListener('resize', this.handleResize);
+  },
+  //width 값이 바뀔 때마다 모바일인지 피씨인지 판별하는 함수 실행
+  watch: {
+    width() {
+      this.mobileOrPc()
+    }
+  }
+}
+</script>
+
+<style>
+.first-box {
+  height: 1117px;
+  background: url("../assets/HomeView/background_img.jpg") bottom left;
+  background-size: cover;
+}
+
+.first-box-mobile {
+  height: 800px;
+  background: linear-gradient(rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.6)), url('../assets/HomeView/main_pic_1.jpg') bottom left;
+  background-size: cover;
+}
+</style>
+```
+
+
+
+---
+
 ### BE🌅
