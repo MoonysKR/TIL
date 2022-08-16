@@ -642,6 +642,47 @@ export const Account = {
     </template>
     ```
 
+- **해결방법(추가, 쉬움)**
+
+  - currentUser를 불러올 수는 있으나 특정 깊이 이상으로 가면 불러오지 못함
+  - state나 getters에 원하는 값을 얕게 작성
+
+  ```js
+  import router from '@/router'
+  import axios from 'axios'
+  import drf from '@/api/drf'
+  
+  export const Account = {
+    state: {
+  	...
+      currentUser: {},
+      username: '',
+      ...
+    },
+  
+    getters: {
+  	...
+      currentUser: state => state.currentUser,
+      username: state => state.username,
+      ...
+    },
+  
+    mutations: {
+      ...
+      SET_CURRENT_USER: (state, user) => {
+        state.currentUser = user
+        state.username = user.username
+      },
+      ...
+    },
+  
+    actions: {
+      ...
+  }
+  ```
+
+  
+
 
 
 
@@ -768,7 +809,7 @@ export const Account = {
 
 ---
 
-##### vuex를 사용할 때 created를해도 getters를 받아오지 못할 때 해결법(`watch  사용`)🎑
+##### vuex를 사용할 때 created를해도 getters를 받아오지 못할 때 해결법(`watch 사용`)🎑
 
 ```vue
 <script>
@@ -1055,6 +1096,35 @@ export default {
 ```
 
 
+
+---
+
+#### PERFORMANCE🎫
+
+##### 성능 검사 dev tool `Lighthouse`🎠
+
+- performance 높이기 위해 필요한 것
+
+  - 요청 수 줄이기
+  - 이미지 최적화
+  - CDN 사용
+  - 모바일 코드 먼저 짜기
+  - CSS, JS, HTML 파일 줄이기
+  - 비동기 처리
+  - 플러그인 줄이기
+  - 웹사이트 캐시 사용하기
+
+  ...
+
+
+
+---
+
+##### vue cli 사용시 font는 app.vue에 걸어서 사용하는 것 보다 각 .vue파일에 적용하는 것이 성능적으로 더 좋음🎡
+
+app.vue => 31%
+
+HomeView.vue => 58%
 
 ---
 
