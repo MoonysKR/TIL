@@ -1154,6 +1154,98 @@ HomeView.vue => 58%
 - 검색 및 필터는 한곳에 모아서 모듈화(유저는 자기가 어떤 필터를 걸었는지 기억하지 않는다)
 - reset 버튼 추가 고려!
 
+  - 변경 전
+
+    ```vue
+    <template>
+      <!-- 서치배너 -->
+      <div class="search row">
+        <div class="col-sm-2 col-md-4 col-0"></div>
+        <div class="search-box col-sm-8 col-md-4 col-12 d-flex justify-content-center">
+          <input class="search-input pl-3" type="text" v-model="info.plantname" placeholder="식물명을 입력해주세요" @keyup.enter="beforeSearch()">        
+          <button class="search-btn" type="submit" @click="beforeSearch()">
+            <span class="material-symbols-outlined d-flex align-items-center justify-content-center">search</span>
+          </button>
+        </div>
+        <div class="col-sm-2 col-md-4 col-0"></div>
+      </div>
+      <div class="select-box row mt-5 mb-3">
+        <div class="col-sm-2 col-0"></div>
+        <div class="select row d-flex justify-content-between col-sm-8 col-12">
+          <div class="create">
+            <!-- 생성버튼 -->
+            <router-link :to="{ name : 'leaf82New' }" v-if="isLoggedIn">
+              <button class="create-btn">
+                등록
+              </button>
+            </router-link>
+          </div>
+          <div class="filter d-flex justify-content-center">
+            <!-- 검색버튼 -->
+            <select class="sido mr-1" @change="beforeFetchSigungu($event)">
+              <option value="null">지역을 선택해주세요</option>
+              <option v-for="loc in sido" :key="loc.pk" :value="loc.sido">{{ loc.sido }}</option>
+            </select>
+            <!-- 시도가 선택되면 활성화 -->
+            <select class="sigungu" @change="beforeFetchSearch($event)" v-if="this.info.sido">
+              <option selected>동네를 선택해주세요</option>
+              <option v-for="loc in sigungu" :key="loc.pk" :value="loc.sigungu">{{ loc.sigungu }}</option>
+            </select>
+            <select class="sigungu" v-if="!this.info.sido" disabled>
+              <option selected>동네를 선택해주세요</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-2 col-0"></div>
+      </div>
+    ...
+    </template>
+    ```
+
+    ![image-20220818090742128](PLANTinum%20PJT%20%ED%9A%8C%EA%B3%A0%EB%A1%9D.assets/image-20220818090742128-16607812723571.png)
+  - 변경 후
+
+    ```vue
+    <template>
+      <!-- 서치 배너 -->
+      <div class="search row">
+        <div class="col-sm-2 col-md-4 col-0"></div>
+        <div class="search-box col-sm-8 col-md-4 col-12">
+          <div class="d-flex justify-content-center">
+            <input class="search-input pl-3" type="text" v-model="info.plantname" placeholder="식물명을 입력해주세요" @keyup.enter="beforeSearch()">        
+            <button class="search-btn" type="submit" @click="beforeSearch()">
+              <span class="material-symbols-outlined d-flex align-items-center justify-content-center">search</span>
+            </button>
+          </div>
+          <!-- 필터링 파트 -->
+          <div class="d-flex justify-content-center">
+            <select class="sido pl-3 active" @change="beforeFetchSigungu($event)">
+              <option value="null">지역을 선택해주세요</option>
+              <option v-for="loc in sido" :key="loc.pk" :value="loc.sido">{{ loc.sido }}</option>
+            </select>
+            <!-- 시도가 선택되면 활성화 -->
+            <select class="sigungu pl-3 active" @change="beforeFetchSearch($event)" v-if="this.info.sido">
+              <option selected>동네를 선택해주세요</option>
+              <option v-for="loc in sigungu" :key="loc.pk" :value="loc.sigungu">{{ loc.sigungu }}</option>
+            </select>
+            <select class="sigungu pl-3" v-if="!this.info.sido" disabled>
+              <option selected>동네를 선택해주세요</option>
+            </select>
+            <!-- 리셋버튼 -->
+            <button class="reset d-flex align-items-center justify-content-center" @click="reset">
+              <span class="material-symbols-outlined">autorenew</span>
+            </button>
+          </div>
+        </div>
+        <div class="col-sm-2 col-md-4 col-0"></div>
+      </div>
+    ...
+    </template>
+    ```
+
+    ![image-20220818091229813](PLANTinum%20PJT%20%ED%9A%8C%EA%B3%A0%EB%A1%9D.assets/image-20220818091229813-16607815513283.png)
+
+
 
 
 ---
