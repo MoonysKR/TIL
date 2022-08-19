@@ -1022,6 +1022,11 @@ const router = createRouter({
 
 - 기능
   - 휴대폰 사이즈일때 배경 이미지 변경
+- 사후 문제점
+  - 같은 div를 3개를 만들기 때문에 비효율적 => `vuex에 device 값을 담는 것으로 수정`
+  - 기존에는 좌우 여백의 경우  breakpoint를 주어 여백을 형성했으나,
+  - viewport를 통해 여백이 달라지기때문에 `유지보수가 힘들어졌다`.
+
 
 ```vue
 <template>
