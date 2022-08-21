@@ -1023,7 +1023,7 @@ const router = createRouter({
 - 기능
   - 휴대폰 사이즈일때 배경 이미지 변경
 - 사후 문제점
-  - 같은 div를 3개를 만들기 때문에 비효율적 => `vuex에 device 값을 담는 것으로 수정`
+  - 같은 div를 3개를 만들기 때문에 비효율적 => `vuex에 device 값을 담는 것으로 수정`(테스트 결과 퍼포먼스적으로는 큰 차이가 없다. 오히려 증가하는 케이스도 있음.)
   - 기존에는 좌우 여백의 경우  breakpoint를 주어 여백을 형성했으나,
   - viewport를 통해 여백이 달라지기때문에 `유지보수가 힘들어졌다`.
 
@@ -1099,6 +1099,67 @@ export default {
 }
 </style>
 ```
+
+
+
+---
+
+##### 내비게이션 바에서 현재 탭일 때 활성화 표시🚩
+
+```vue
+<template>
+  <nav class="navbar navbar-expand-lg navbar-light px-4">
+    ...
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        ...
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle pb-0 mx-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" :style="[isLeaf82 ? {fontWeight: 700} : {fontWeight: 400}]">
+            잎팔이
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <div>
+              <router-link class="dropdown-item" :to="{ name: 'leaf82' }">거래</router-link>
+            </div>
+            <div class="dropdown-divider"></div>
+            <router-link class="dropdown-item" :to="{ name: 'messenger' }" v-if="isLoggedIn">채팅</router-link>
+            <router-link class="dropdown-item" :to="{ name: 'login' }" v-if="!isLoggedIn">채팅</router-link>
+          </div>
+        </li>
+        ...
+  </nav>
+</template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex'
+
+export default {
+  name: 'NavBar',
+
+  data() {
+    return {
+      ...
+      leaf82Group: ['leaf82', 'leaf82New', 'leaf82Detail', 'leaf82Edit', 'messenger'],
+      ...
+  },
+
+  computed: {
+    ...
+    isLeaf82() {
+      return this.leaf82Group.includes(this.$route.name)
+    },
+  ...
+}
+</script>
+```
+
+- 기능
+  - 하나의 탭에 연결된 페이지가 많을 때 해당 페이지에서 모두 같은 탭을 활성화 표시하기
+- 포인트
+  1. leaf82의 하위 페이지들을 모두 리스트로 만들어 둠
+  2. `isLeaf82()`에서 현재 route 페이지의 이름이 `leaf82Group`에 포함되어 있다면 `true`값을 반환함
+  3. li 태그의 style을 바인딩하여 활성화 표시 여부를 결정함
+     - 삼항 연산자를 사용하여 `true`값이면 굵은 글씨를, `false`값이면 얇은 글씨를 적용하도록 함
 
 
 
