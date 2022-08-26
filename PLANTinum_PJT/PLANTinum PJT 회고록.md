@@ -1165,6 +1165,249 @@ export default {
 
 ---
 
+더보기 클릭시 추가 데이터 받아오기🎢
+
+- 흐름
+  - `더보기` 버튼 클릭
+  - 서버로 파라미터를 담아 요청(`page(몇번쨰 페이지인지), limit(몇개씩 받아올 건지)`)
+  - 받아온 데이터  `vuex`에 담아주기
+  - `watch`를 통해 vuex가 변경되면 `.vue`파일에 `data`채워주기
+
+```vue
+src/components/Leaf82Search.vue
+
+<template>
+...
+	<!-- sellObject로 데이터를 받는데 next 값이 존재한다면(더 받을 데이터가 있는지 백엔드에서 검사) -->
+    <div class="d-flex justify-content-center pb-5" v-if="isSell">
+      <button class="more-btn" v-if="!!sellObject.next" @click="more()">- 더보기 -</button>
+    </div>
+    <div class="d-flex justify-content-center pb-5" v-if="!isSell">
+      <button class="more-btn" v-if="!!buyObject.next" @click="more()">- 더보기 -</button>
+    </div>
+...
+</template>
+
+<script>
+
+    
+    
+</script>
+<script>
+import { mapActions , mapGetters } from 'vuex'
+import router from '@/router'
+
+
+export default {
+  name: 'Leaf82SearchList',
+
+  //bList, sList를 채워서 v-for문으로 사용자에게 보여줌
+  data () {
+    return {
+      isSell: true,
+      info: {
+        plantname: '',
+        sido: '',
+        sigungu: '',
+        limit: 20,
+        page: 1,
+        category_class: '분양해요',
+      },
+      bList: [],
+      sList: [],
+      searchBox: '',
+      create: '',
+      title: '',
+    }
+  },
+
+  methods: {
+    ...mapActions(['fetchSigungu', 'search',]),
+
+    fillList() {
+      this.sList = this.sellList
+      this.bList = this.buyList
+      for (let item of this.sList) {
+        const price = Number(item.price)
+        item.price = price.toLocaleString('ko-KR')
+        if (item.plantname.length > 7) {
+          const plantname = item.plantname.substr(0, 7) + '...'
+          item.plantname = plantname
+        }
+      }
+      for (let item of this.bList) {
+        const price = Number(item.price)
+        item.price = price.toLocaleString('ko-KR')
+        if (item.plantname.length > 7) {
+          const plantname = item.plantname.substr(0, 7) + '...'
+          item.plantname = plantname
+        }
+      }
+    },
+	
+    // 더보기 버튼 클릭시 호출할 api
+    more() {
+      this.info.page += 1
+      const params = this.info
+      if (!this.info.plantname) {
+        delete params.plantname
+      }
+      if (!this.info.sigungu) {
+        delete params.sigungu,
+        delete params.sido
+      }
+      this.search(params)
+    },
+
+	...
+  },
+
+  // sellObject, sellList, buyObject, buyList 값이 변화될 예정
+  computed: {
+    ...mapGetters(['sido', 'sigungu', 'isLoggedIn', 'sellObject', 'sellList', 'buyObject', 'buyList', 'device'])
+  },
+
+  created() {
+    this.fetchSearch()
+    this.changeDevice()
+  },
+
+  // 와치를 통해 값이 바뀔 때마다 데이터 값을 추가해줄 예정
+  watch: {
+    sellList() {
+      this.fillList()
+    },
+    buyList() {
+      this.fillList()
+    },
+    device() {
+      this.changeDevice()
+    }
+  }
+}
+</script>
+
+<style>
+
+</style>
+```
+
+```js
+import axios from 'axios'
+import drf from '@/api/drf'
+import router from '@/router'
+
+export const Leaf82 = {
+  state: {
+	...
+    sellObject: {},
+    sellList: [],
+    buyObject: {},
+    buyList: [],
+    ...
+  },
+
+  getters: {
+    ...
+    sellObject: state => state.sellObject,
+    sellList: state => state.sellList,
+    buyObject: state => state.buyObject,
+    buyList: state => state.buyList,
+    ...
+  },
+
+  mutations: {
+    ...
+    // set은 첫 불러오기 add는 추가하기
+    // count는 데이터 총 개수
+    // next는 불러온 데이터들 뒤에 데이터를 더 불러올 수 있는지, 개수와 page 변수로 판단
+    // previous는 이전 데이터가 있는지
+    SET_SELLOBJECT: (state, sellObject) => {
+      state.sellObject = {
+        count: sellObject.count,
+        next: sellObject.next,
+        previous: sellObject.previous
+      }
+      state.sellList = sellObject.results
+    },
+    // sellList에 데이터들 for 문으로 돌려주기
+    ADD_SELLOBJECT: (state, sellObject) => {
+      state.sellObject = {
+        count: sellObject.count,
+        next: sellObject.next,
+        previous: sellObject.previous
+      }
+      for (let result of sellObject.results) {
+        const price = Number(result.price)
+        result.price = price.toLocaleString('ko-KR')
+        if (result.plantname.length > 7) {
+          const plantname = result.plantname.substr(0, 7) + '...'
+          result.plantname = plantname
+        }
+        state.sellList.push(result)
+      }
+    },
+    SET_BUYOBJECT: (state, buyObject) => {
+      state.buyObject = {
+        count: buyObject.count,
+        next: buyObject.next,
+        previous: buyObject.previous
+      }
+      state.buyList = buyObject.results
+    },
+    ADD_BUYOBJECT: (state, buyObject) => {
+      state.buyObject = {
+        count: buyObject.count,
+        next: buyObject.next,
+        previous: buyObject.previous
+      }
+      for (let result of buyObject.results) {
+        const price = Number(result.price)
+        result.price = price.toLocaleString('ko-KR')
+        if (result.plantname.length > 7) {
+          const plantname = result.plantname.substr(0, 7) + '...'
+          result.plantname = plantname
+        }
+        state.buyList.push(result)
+      }
+    },
+    ...
+  },
+
+  actions: {
+    // 서치로 axios 요청
+    // params로 데이터를 보내줄 예정
+    // page가 1이라면 초기 요청이기에 set, 그게 아니라면 add
+    search({ commit }, params) {
+      axios({
+        url: drf.leaf82.search(),
+        method: 'get',
+        params
+      })
+      .then(res => {
+        if (params.category_class === '분양해요' && params.page === 1) {
+          commit('SET_SELLOBJECT', res.data)
+        } else if (params.category_class === '분양해요' && params.page !== 1) {
+          commit('ADD_SELLOBJECT', res.data)
+        } else if (params.category_class === '분양받아요' && params.page === 1) {
+          commit('SET_BUYOBJECT', res.data)
+        } else {
+          commit('ADD_BUYOBJECT', res.data)
+        }
+      })
+      .catch(err => {
+        console.log(err)
+      })
+    },
+
+    ...
+}
+```
+
+
+
+---
+
 #### PERFORMANCE🎫
 
 ##### 성능 검사 dev tool `Lighthouse`🎠
