@@ -1,0 +1,78 @@
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <!-- React 세팅 -->
+  <script
+    crossorigin
+    src="https://unpkg.com/react@17/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
+  ></script>
+  <!-- 바벨 세팅 -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- 바벨을 인식하기 위해 type 추가 -->
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    function App() {
+      // useState()의 괄호 안에는 data의 default 값을 설정
+      const [amount, setAmount] = React.useState();
+      const [fliped, setFlipped] = React.useState(false);
+      function onChange(event) {
+        // console.log(event.target.value);
+        // minutes를 출력하기 위해 저장해주는 단계
+        setAmount(event.target.value);
+      }
+      function reset() {
+        setAmount(0);
+      }
+      // const reset = () => setMinutes(event.target.value)
+      function onFlip() {
+        reset();
+        setFlipped((current) => !current);
+      }
+      // const onFlip = () => setFlipped((current) => !current);
+      return (
+        // 리엑트에서는 for를 사용할 수 없음. js가 선점했기 때문에 htmlFOR를 사용
+        // 동일하게 class도 className을 사용
+        <div>
+          <div>
+            <h1 className="hi">Super Converter</h1>
+            <label htmlFor="minutes">Minutes</label>
+            <input
+              value={fliped ? amount * 60 : amount}
+              id="minutes"
+              placeholder="Minutes"
+              type="number"
+              // onChange 이벤트 핸들러 : 변화하는 값을 캐치
+              // 캐치해서 onChange 함수 실행
+              onChange={onChange}
+              disabled={fliped}
+            />
+            <h4>You want convert {amount}</h4>
+          </div>
+          <div>
+            <label htmlFor="hours">Hours</label>
+            <input
+              // Math.round => 반올림해주는 메서드
+              value={fliped ? amount : Math.round(amount / 60)}
+              id="hours"
+              placeholder="Hours"
+              type="number"
+              disabled={!fliped}
+              onChange={onChange}
+            />
+          </div>
+          <button onClick={reset}>reset</button>
+          <button onClick={onFlip}>flip</button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

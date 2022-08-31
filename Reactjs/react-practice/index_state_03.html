@@ -1,0 +1,41 @@
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <!-- React 세팅 -->
+  <script
+    crossorigin
+    src="https://unpkg.com/react@17/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
+  ></script>
+  <!-- 바벨 세팅 -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- 바벨을 인식하기 위해 type 추가 -->
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    function App() {
+      const [counter, setCounter] = React.useState(0);
+      const onClick = () => {
+        // modifier(counter + 1);
+        // counter를 사용하면 다른곳에서 조작 가능
+        // 함수를 넣어줌으로써 current값을 입력받고 조작하는 형식으로
+        // 보다 안전한 방법
+        // 함수는 항상 현재의 state를 받아오기로 되어있음
+        setCounter((currnet) => current + 1);
+      };
+      return (
+        <div>
+          <h3>Total clicks: {counter}</h3>
+          <button onClick={onClick}>Click me</button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

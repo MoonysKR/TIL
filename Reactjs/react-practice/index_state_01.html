@@ -1,0 +1,45 @@
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <!-- React 세팅 -->
+  <script
+    crossorigin
+    src="https://unpkg.com/react@17/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
+  ></script>
+  <!-- 바벨 세팅 -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- 바벨을 인식하기 위해 type 추가 -->
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    // 안좋은 방법 - 변수 설정, 함수 선언, 함수 연결
+    let counter = 0;
+
+    // 렌더링은 한번만 일어나기 때문에 안넣으면 바뀌지 않음, 지속적으로 렌더링을 해주면 귀찮음 -> 안좋음
+    function countUp() {
+      counter += 1;
+      render();
+    }
+
+    // 렌더 혹은 재렌더링을 위해 함수 호출
+    function render() {
+      ReactDOM.render(<Conatiner />, root);
+    }
+
+    const Conatiner = () => (
+      <div>
+        <h3>Total clicks: {counter}</h3>
+        <button onClick={countUp}>Click me</button>
+      </div>
+    );
+
+    // 렌더링은 한번만 진행됨, 버튼을 클릭해도 바뀌지 않음
+    render();
+  </script>
+</html>

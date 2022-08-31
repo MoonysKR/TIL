@@ -1,0 +1,42 @@
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <!-- React 세팅 -->
+  <script
+    crossorigin
+    src="https://unpkg.com/react@17/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
+  ></script>
+  <!-- 바벨 세팅 -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- 바벨을 인식하기 위해 type 추가 -->
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    function App() {
+      // React.useState() 사용시 배열을 주는데 첫 요소는 data, 두번째 요소는 data값을 바꿀 때 사용할 값
+      // const data = React.useState(0);
+      // console.log(data);
+      // const counter = data[0];
+      // const modifier = data[1];
+      const [counter, modifier] = React.useState(0);
+      const onClick = () => {
+        // modifier는 값을 바꿔주고 리렌더링
+        modifier(counter + 1);
+      };
+      return (
+        <div>
+          <h3>Total clicks: {counter}</h3>
+          <button onClick={onClick}>Click me</button>
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
