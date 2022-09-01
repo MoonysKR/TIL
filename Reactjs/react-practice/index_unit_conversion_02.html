@@ -18,10 +18,10 @@
   <script type="text/babel">
     const root = document.getElementById("root");
 
-    function App() {
+    function MinutesToHours() {
       // useState()의 괄호 안에는 data의 default 값을 설정
       const [amount, setAmount] = React.useState();
-      const [fliped, setFlipped] = React.useState(false);
+      const [inverted, setInverted] = React.useState(false);
       function onChange(event) {
         // console.log(event.target.value);
         // minutes를 출력하기 위해 저장해주는 단계
@@ -31,27 +31,26 @@
         setAmount(0);
       }
       // const reset = () => setMinutes(event.target.value)
-      function onFlip() {
+      function onInvert() {
         reset();
-        setFlipped((current) => !current);
+        setInverted((current) => !current);
       }
-      // const onFlip = () => setFlipped((current) => !current);
+      // const onInvert = () => setInverted((current) => !current);
       return (
         // 리엑트에서는 for를 사용할 수 없음. js가 선점했기 때문에 htmlFOR를 사용
         // 동일하게 class도 className을 사용
         <div>
           <div>
-            <h1 className="hi">Super Converter</h1>
             <label htmlFor="minutes">Minutes</label>
             <input
-              value={fliped ? amount * 60 : amount}
+              value={inverted ? amount * 60 : amount}
               id="minutes"
               placeholder="Minutes"
               type="number"
               // onChange 이벤트 핸들러 : 변화하는 값을 캐치
               // 캐치해서 onChange 함수 실행
               onChange={onChange}
-              disabled={fliped}
+              disabled={inverted}
             />
             <h4>You want convert {amount}</h4>
           </div>
@@ -59,16 +58,44 @@
             <label htmlFor="hours">Hours</label>
             <input
               // Math.round => 반올림해주는 메서드
-              value={fliped ? amount : Math.round(amount / 60)}
+              value={inverted ? amount : Math.round(amount / 60)}
               id="hours"
               placeholder="Hours"
               type="number"
-              disabled={!fliped}
+              disabled={!inverted}
               onChange={onChange}
             />
           </div>
           <button onClick={reset}>reset</button>
-          <button onClick={onFlip}>flip</button>
+          <button onClick={onInvert}>
+            {inverted ? "Turn back" : "Invert"}
+          </button>
+        </div>
+      );
+    }
+
+    function KmToMiles() {
+      return <h3>KM 2 M</h3>;
+    }
+
+    function App() {
+      const [index, setIndex] = React.useState("xx");
+      const onSelect = (event) => {
+        // console.log(event.target.value);
+        setIndex(event.target.value);
+      };
+      console.log("reder w/ {index}");
+      return (
+        <div>
+          <h1>Super Converter</h1>
+          <select value={index} onChange={onSelect}>
+            <option value="xx">Select ur unit</option>
+            <option value="0">Minutes & Hours</option>
+            <option value="1">KM & M</option>
+          </select>
+          <hr />
+          {index === "0" ? <MinutesToHours /> : null}
+          {index === "1" ? <KmToMiles /> : null}
         </div>
       );
     }
