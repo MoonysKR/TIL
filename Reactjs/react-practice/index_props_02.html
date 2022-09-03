@@ -1,0 +1,82 @@
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <!-- React 세팅 -->
+  <script
+    crossorigin
+    src="https://unpkg.com/react@17/umd/react.production.min.js"
+  ></script>
+  <script
+    crossorigin
+    src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
+  ></script>
+  <!-- 바벨 세팅 -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- 바벨을 인식하기 위해 type 추가 -->
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    // 함수가 받는 인자로 props 가능
+
+    // shorcut (이 방법으로 자주 쓰임)
+    // 받은 데이터 명칭을 그대로 사용하면
+    // {text}를 인자값으로 명시하면
+    // props.text는 text로 쓸 수 있음
+    // 두 개를 동시에 받을 수도 있음
+    // function Btn(props) {
+    function Btn({ text, changeValue }) {
+      // console.log(props);
+      console.log(text, "was rendered");
+      return (
+        <button
+          onClick={changeValue}
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            borderRadius: 10,
+            border: 0,
+            fontSize: 16,
+          }}
+        >
+          {text}
+        </button>
+      );
+    }
+
+    // React memo
+    // Btn이 props로 인해 바뀔 때 바뀐 부분만 다시 렌더링
+    const MemorizedBtn = React.memo(Btn);
+
+    // function ConfirmBtn() {
+    //   return <button>Confirm</button>;
+    // }
+
+    // 문제 상황
+    // 모든 버튼에 동일한 스타일을 주고 싶음
+    // 다시 쓰기 귀찮음
+    // 컴포넌트 함수에 인자로 넣어줄 값을 줄 수 있음
+    // 밑 경우에은 Btn({text : 'Save Changes' , x = 'x'})를 실행하는 형식
+
+    // 중요
+    // state가 변경될 때 모든 컴포넌트들이 새로고침 됨
+    function App() {
+      const [value, setValue] = React.useState("Save Changes");
+      const changeValue = () => setValue("RevertChanges");
+      // 주의!
+      // 실제 html요소에 onClick은 이벤트 리스너,
+      // 컴포넌트에 단 onClick은 prop
+      // 함수도 props 가능
+      return (
+        <div>
+          <MemorizedBtn text={value} changeValue={changeValue} />
+          <MemorizedBtn text="Continue" />
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+</html>

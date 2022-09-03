@@ -1,0 +1,58 @@
+<html lang="en">
+  <body>
+    <div id="root"></div>
+  </body>
+  <!-- React 세팅 -->
+  <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
+  <!-- Prop Types 세팅 -->
+  <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+  <!-- 바벨 세팅 -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- 바벨을 인식하기 위해 type 추가 -->
+  <script type="text/babel">
+    const root = document.getElementById("root");
+
+    // 함수가 받아오는 인자값에 default 줄 수 있음
+    function Btn({ text, fontSize = 60 }) {
+      // 주의
+      // 받아오는 인자와 스타일 이름이 같다면 객체 형식이 아니라 이름 하나로 대체
+      // 그렇지 않으면 작동하지 않음
+      // 예) 이 경우의 fontSize
+      return (
+        <button
+          style={{
+            backgroundColor: "tomato",
+            color: "white",
+            padding: "10px 20px",
+            borderRadius: 10,
+            border: 0,
+            fontSize,
+          }}
+        >
+          {text}
+        </button>
+      );
+    }
+
+    // prop types 설정
+    Btn.propTypes = {
+      // 이름 : PropTypes.타입
+      // 이름 : PropTypes.타입.isRequired => 반드시 필요
+      text: PropTypes.string,
+      fontSize: PropTypes.number,
+    };
+
+    function App() {
+      return (
+        <div>
+          <Btn text="Save Changes" fontSize={18} />
+          <Btn text={"Continue"} />
+        </div>
+      );
+    }
+
+    ReactDOM.render(<App />, root);
+  </script>
+</html>
