@@ -1,4 +1,4 @@
-# REACTJS
+# REACT JS
 
 
 
@@ -1243,6 +1243,52 @@ export default Movie;
   };
   
   export default Movie;
+  ```
+
+  
+
+---
+
+### Publishing
+
+- install
+
+  ```bash
+  // 깃헙에 업로드해주는 패키지
+  
+  npm i gh-pages
+  ```
+
+  ```bash
+  // 최적화해주고 준비해주는 명령어
+  
+  npm run build
+  ```
+
+  ```json
+  ...
+    "scripts": {
+      "start": "react-scripts start",
+      "build": "react-scripts build",
+      "test": "react-scripts test",
+      "eject": "react-scripts eject",
+      "deploy": "gh-pages -d build",
+      "predeploy": "npm run build"
+    },
+  ...
+    "browserslist": {
+      "production": [
+        ">0.2%",
+        "not dead",
+        "not op_mini all"
+      ],
+      "development": [
+        "last 1 chrome version",
+        "last 1 firefox version",
+        "last 1 safari version"
+      ]
+    },
+    "hompage": "https://{사용자닉네임}.gihub.io/{깃헙 레퍼지토리}"
   ```
 
   
