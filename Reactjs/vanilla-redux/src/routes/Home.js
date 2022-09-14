@@ -28,6 +28,10 @@ function Home() {
     // props를 받아왔기 때문에 조작할 힘이 생겼다.
   };
 
+  const onClick = () => {
+    dispatch(deleteToDo(id));
+  };
+
   return (
     <div>
       <h1>To Do</h1>
@@ -37,7 +41,7 @@ function Home() {
       </form>
       <ul>
         {toDos.map((toDo) => (
-          <ToDo {...toDo} key={toDo.id} />
+          <ToDo {...toDo} onClick={onClick} key={toDo.id} />
         ))}
       </ul>
     </div>
