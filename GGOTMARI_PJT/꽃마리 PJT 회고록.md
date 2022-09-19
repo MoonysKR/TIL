@@ -125,9 +125,173 @@
   export default CollectionBtn;
   ```
 
+
+
+
+---
+
+##### 버튼으로 필터링하기
+
+- 기존 코드
+
+  - useState를 활용해 isActive 요소를 추가
+  - 모든 카테고리마다 해당 요소를 추가해야하는 불편함
+  - 함수가 길어짐
+
+  ```jsx
+  import { useState } from "react";
+  import CollectionBtn from "../../atoms/profile/CollectionBtn";
+  import CollectionImage from "../../atoms/profile/CollectionImage";
+  import YJ from "../../../assets/YJ.png";
   
+  function ProfileCollection() {
+    const [tabs, setTabs] = useState([
+      { category: "전체", isActive: true },
+      { category: "가족", isActive: false },
+      { category: "연인", isActive: false },
+      { category: "친구", isActive: false },
+      { category: "선생님", isActive: false },
+      { category: "직장동료", isActive: false },
+      { category: "기타", isActive: false },
+    ]);
+  
+    const btnClick = (category) => {
+      // console.log("clicked", tabs);
+      for (let i = 0; i < tabs.length; i++) {
+        // console.log(tabs[i]);
+        if (tabs[i].category === category && tabs[i].isActive === true) {
+          return;
+        } else if (tabs[i].category === category && tabs[i].isActive === false) {
+          const tmp = [
+            { category: "전체", isActive: false },
+            { category: "가족", isActive: false },
+            { category: "연인", isActive: false },
+            { category: "친구", isActive: false },
+            { category: "선생님", isActive: false },
+            { category: "직장동료", isActive: false },
+            { category: "기타", isActive: false },
+          ];
+          tmp[i].isActive = true;
+          // console.log(tmp);
+          setTabs(tmp);
+        }
+      }
+    };
+  
+    return (
+      <>
+        {/* 탭들 */}
+        <div className="tabs grid grid-cols-4 mx-4">
+          {tabs.map((tab) => {
+            // console.log(tab);
+            return (
+              <div key={tab.category} className="col-span-1 p-0.5">
+                <CollectionBtn
+                  category={tab.category}
+                  isActive={tab.isActive}
+                  onClick={() => {
+                    // console.log("clicked");
+                    btnClick(tab.category);
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
+        {/* 사진 및 내용들 */}
+        <div className="colletion-items grid grid-cols-3 mt-3 mx-3">
+          {collectionItems.map((item) => {
+            return (
+              <div className="collection-item p-1.5 text-xs">
+                <CollectionImage url={item.url} title={item.title} />
+              </div>
+            );
+          })}
+        </div>
+      </>
+    );
+  }
+  
+  export default ProfileCollection;
+  ```
 
-
+- 개선 코드
+  - 각 카테고리를 담은 객체 생성
+  - index를 값으로 하는 activeTab useState 생성
+  - 카테고리를 담은 객체의 index값으로 useState  변환 및 수정
+  
+  ```jsx
+  import { useState } from "react";
+  import CollectionBtn from "../../atoms/profile/CollectionBtn";
+  import CollectionImage from "../../atoms/profile/CollectionImage";
+  import YJ from "../../../assets/YJ.png";
+  
+  function ProfileCollection() {
+    const [activeTab, setActiveTab] = useState(0);
+  
+    const tabs = [
+      { category: "전체" },
+      { category: "가족" },
+      { category: "연인" },
+      { category: "친구" },
+      { category: "선생님" },
+      { category: "직장동료" },
+      { category: "기타" },
+    ];
+  
+    const onClickTab = (index) => {
+      setActiveTab(index);
+    };
+  
+    const [collectionItems, setCollectionItems] = useState([
+      { url: YJ.src, title: "소통왕 영준" },
+      { url: YJ.src, title: "소통왕 영준" },
+      { url: YJ.src, title: "소통왕 영준" },
+      { url: YJ.src, title: "소통왕 영준" },
+      { url: YJ.src, title: "소통왕 영준" },
+      { url: YJ.src, title: "소통왕 영준" },
+      { url: YJ.src, title: "소통왕 영준" },
+    ]);
+  
+    return (
+      <>
+        {/* 탭들 */}
+        <div className="tabs grid grid-cols-4 mx-4">
+          {tabs.map((tab, index) => {
+            // console.log(tab);
+            return (
+              <div key={tab.category} className="col-span-1 p-0.5">
+                <CollectionBtn
+                  category={tab.category}
+                  activeTab={activeTab}
+                  index={index}
+                  onClick={() => {
+                    // console.log("clicked");
+                    onClickTab(index);
+                  }}
+                />
+              </div>
+            );
+          })}
+        </div>
+        {/* 사진 및 내용들 */}
+        <div className="colletion-items grid grid-cols-3 mt-3 mx-3">
+          {collectionItems.map((item, index) => {
+            return (
+              <div className="collection-item p-1.5 text-xs" key={index}>
+                <CollectionImage url={item.url} title={item.title} />
+              </div>
+            );
+          })}
+        </div>
+      </>
+    );
+  }
+  
+  export default ProfileCollection;
+  ```
+  
+  
 
 ---
 
