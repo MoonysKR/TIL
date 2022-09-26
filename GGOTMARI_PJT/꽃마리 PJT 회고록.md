@@ -8,7 +8,10 @@
 
 #### Javascript
 
+##### 삼항연산자에서 리스트가 비었는지 안비었는지 확인하기
 
+- 문제점 
+  - 자바스크립트의 경우 === [] 못알아먹음
 
 ---
 
@@ -312,6 +315,101 @@
   -  navigator를 활용해 복사 후, alert창 띄우기
 
 
+
+---
+
+##### useRouter 훅 라이프사이클 이슈 - useState보다 늦어서 undefined로 뜨는 문제
+
+- 문제 상황
+
+  - profile관련 url에 username이 필요함
+  - username을 받아와 axios 요청을 보내야 함
+  - useRouter를 사용하여 axios요청을 보내려했으나 초기 값이 undefined로 뜸
+  - useState보다 useRouter가 늦게 실행되어 useEffect를 실행할 때 undefined를 받아옴
+
+- 해결
+
+  - JS에서 window 접근으로 해결
+    - `const username = window.location.pathname.substring(9);`
+
+- 코드
+
+  ```jsx
+  import { useRouter } from "next/router";
+  import { useEffect, useState } from "react";
+  import StoryImage from "../../components/atoms/profile/StoryImage";
+  import ProfileInfo from "../../components/organisms/profile/ProfileInfo";
+  import ProfileNavBar from "../../components/organisms/profile/ProfileNavBar";
+  import { getUser } from "../../api/profile.js";
+  import noStory from "../../assets/profile/main/noStoryImg.jpg";
+  
+  export default function Profile() {
+    const router = useRouter();
+    const [userInfo, setUserInfo] = useState({
+      status: "",
+      message: "",
+      isMe: "",
+      user: {
+        userName: "",
+        followingCount: "",
+        followerCount: "",
+        userImage: "",
+        isFollow: "",
+      },
+      articles: [
+        {
+          articleId: "",
+          articleImage: "",
+        },
+      ],
+      likeFlowers: [
+        {
+          tag: "",
+          flowers: [
+            {
+              flowerImage: "",
+              subjectId: "",
+              kindId: "",
+              kindName: "",
+            },
+          ],
+        },
+      ],
+      likeArticles: [
+        {
+          articleId: "",
+          articleImage: "",
+          userName: "",
+          likes: "",
+        },
+      ],
+    });
+  
+    const success = (res) => {
+      setUserInfo(res.data);
+    };
+    const fail = (err) => console.log(err);
+    // 서버 통신 짤 코드
+  
+    const getInfo = (username) => {
+      // console.log(username);
+      getUser(username, success, fail);
+    };
+  
+    useEffect(() => {
+      if (localStorage.getItem("accessToken")) {
+        const username = window.location.pathname.substring(9);
+        getInfo(username);
+      } else {
+        alert("로그인이 필요한 서비스입니다.");
+        router.push("/login");
+      }
+    }, []);
+  
+    return ...
+  ```
+
+  
 
 ---
 
