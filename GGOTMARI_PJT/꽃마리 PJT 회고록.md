@@ -291,7 +291,27 @@
   export default ProfileCollection;
   ```
   
-  
+
+
+
+---
+
+##### URL 클립보드로 복사하기
+
+```jsx
+  const copyURL = async () => {
+    const url = window.location.href;
+    // console.log(url);
+    await navigator.clipboard.writeText(url);
+    alert("프로필이 복사되었습니다.");
+  };
+```
+
+- 기능
+  - url을 변수에 담고
+  -  navigator를 활용해 복사 후, alert창 띄우기
+
+
 
 ---
 
