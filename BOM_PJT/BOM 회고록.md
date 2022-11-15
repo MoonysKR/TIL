@@ -1,4 +1,4 @@
-# BOM PJT 회고록
+BOM PJT 회고록
 
 [TOC]
 
@@ -82,6 +82,117 @@ function PatientDetail({ isPC }) {
 
 ---
 
+##### 엑셀 다운로드
+
+- 참고한 링크
+  - https://soonh.tistory.com/38
+  - https://wiki.jjagu.com/?p=373
+  - https://minhanpark.github.io/today-i-learned/get-blob-with-axios/
+- 코드
+
+```js
+// api/UserApi.js
+
+import axios from "axios";
+
+import ls from "helper/LocalStorage";
+
+axios.defaults.withCredentials = true;
+
+const UserApi = axios.create({
+  baseURL: "https://thundervolt.co.kr/api/",
+  // baseURL: "http://127.0.0.1:8000/api/",
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+UserApi.interceptors.request.use(
+  (config) => {
+    const accessToken = ls.get("accessToken");
+    if (accessToken) {
+      config.headers["Authorization"] = "Bearer " + accessToken;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+export default UserApi;
+```
+
+```js
+// api/PatientDetail.js api 작성하는 파일
+
+import UserApi from "api/UserApi";
+
+...
+
+function requestExcelDownload(params, success, fail) {
+  // axios.create를 활용해 인스턴스를 생성했을 때 get 요청의 인스턴스 메서드 확인하기
+  // 참고 : https://yamoo9.github.io/axios/guide/api.html#%EC%9D%B8%EC%8A%A4%ED%84%B4%EC%8A%A4-%EC%83%9D%EC%84%B1
+  UserApi.get("wards/patients/excel", { responseType: "blob", params })
+    .then(success)
+    .catch(fail);
+}
+
+export {
+  ...
+  requestExcelDownload,
+};
+
+
+// axios.create를 활용해 인스턴스를 생성했을 때 사용할 수 있는 메서드 목록
+// axios.get(url[, config])
+// axios.post(url[, data[, config]])
+// axios.put(url[, data[, config]])
+// axios.patch(url[, data[, config]])
+// axios.delete(url[, config])
+// axios.request(config)
+// axios.head(url[, config])
+// axios.options(url[, config])
+// axios.getUri([config])
+```
+
+```js
+// page/PatientDetail.js
+
+  // 요청 성공시 실행시킬 함수
+  const requestExcelDownloadSuccess = (res) => {
+    // const blobURL = window.URL.createObjectURL(new Blob([response.data], { type: response.headers['content-type'] }));
+    var blob = new Blob([res.data], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    var blobURL = window.URL.createObjectURL(blob);
+    var tempLink = document.createElement("a");
+    tempLink.style.display = "none";
+    tempLink.href = blobURL;
+    tempLink.setAttribute("download", "test.xlsx");
+    document.body.appendChild(tempLink);
+    tempLink.click();
+    document.body.removeChild(tempLink);
+    window.URL.revokeObjectURL(blobURL);
+  };
+
+  // 온클릭 메서드 정의
+  const clickExcelDownload = () => {
+    // 파람스로 넘겨줄 객체 할당
+    const newParams = {
+      number: params.id,
+      period: filter.current.period,
+    };
+    requestExcelDownload(newParams, requestExcelDownloadSuccess, (err) =>
+      console.log(err)
+    );
+  };
+```
+
+
+
+---
+
 #### React.js
 
 ##### innerWidth 값 바꿔주기🎆
@@ -127,3 +238,19 @@ export default PatientDetail;
 - `isPC`라는 값을 `useState`로 할당
 - 처음 시작될 때 `useEffect`를 사용해서 초기에 값 isPC값 채워주기
 - `setInterval`을 사용해서 1초마다 isPC 초기화해주기
+
+---
+
+#### 퍼포먼스
+
+##### webfont 이슈🚓
+
+- 문제 상황
+  - 퍼포먼스 점수가 85점 언저리였음
+  - lighthouse를 돌리면  웹폰트 관련 이슈가 보여졌음
+  - CDN이나 링크로 받아오던 폰트 파일
+  - static파일을 관리하라는 알림이 뜸
+- 해결방법
+  - woff2 파일을 다운받아 assets에 추가하고 링크  수정
+- 결과
+  - 85점이던 퍼포먼스 점수를 92점까지 높임
