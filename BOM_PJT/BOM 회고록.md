@@ -239,6 +239,50 @@ export default PatientDetail;
 - 처음 시작될 때 `useEffect`를 사용해서 초기에 값 isPC값 채워주기
 - `setInterval`을 사용해서 1초마다 isPC 초기화해주기
 
+
+
+---
+
+##### react life cycle🎉
+
+`useState를 정의할 때 초기 값 -> props -> useState에 들어오는 값`
+
+- 문제 상황 
+
+  - state라는 useState({})을 정의하고 객체에 key, value 값을 가져올 예정
+    - 예시
+      - {username : 'aaa' , age: 18}
+
+  - 다음으로 props로 username을 전달해주고 싶음 그래서 html 코드에 prop로 username을 전달해줌
+    - 예시
+      - <Component username={state.username} />
+  - 이경우 undefined에러가 발생
+
+
+
+- 발생원인
+  - 초기에 useState를 정의할 때 {} 빈 객체로 정의했기 때문에 원하는 값을 인식할 수 없음
+  - props를 초기에 읽을 때 해당 key값이 없음
+
+
+
+- 해결방안
+
+  - 사용할 key값을 기준으로 useState 여러개 정의
+
+    - 예시
+
+      ```js
+      const [username, setUsername] = useState('')
+      const [age, setAge] = useState(0)
+      
+      // setUsername, setAge 함수
+      
+      return <Component username={username} />
+      ```
+
+      
+
 ---
 
 #### 퍼포먼스
