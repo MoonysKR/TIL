@@ -281,7 +281,23 @@ export default PatientDetail;
       return <Component username={username} />
       ```
 
-      
+![image-20221122093835839](BOM 회고록.assets/image-20221122093835839.png)
+
+
+
+---
+
+##### useState와 useRef의 차이🎊
+
+1. 렌더링 여부
+   - useState는 바뀔때마다 렌더링되지만 useRef는 저장은 되지만 바뀌지 않는다
+   - 이로인해 useRef를 확인할 때는 console.log를 통해 진행
+
+
+
+2. 리액트 공식문서 내용
+   - useRef() Hook은 DOM ref만을 위한 것이 아닙니다. 본질적으로 useRef는 .current 프로퍼티에 변경 가능한 값을 담고 있는 “상자”와 같습니다. 만약 `<div ref={myRef} />`를 사용하여 React로 ref 객체를 전달한다면, React는 모드가 변경될 때마다 변경된 DOM 노드에 그것의 .current 프로퍼티를 설정할 것입니다. 
+   - useRef는 내용이 변경될 때 그것을 알려주지는 않는다는 것을 유념하세요. .current 프로퍼티를 변형하는 것이 리렌더링을 발생시키지는 않습니다.
 
 ---
 
