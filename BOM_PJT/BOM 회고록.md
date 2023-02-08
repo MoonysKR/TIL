@@ -323,6 +323,38 @@ export default PatientDetail;
 
 ##### 쿠키와 로컬 스토리지의 차이 - JWT 이해
 
-
+- 지속성
+  - 로컬스토리지는 사용자가 브라우저를 닫아도 유지가 되지만, 쿠키에 저장된 데이터는 사용자가 브라우저를 닫거나 쿠키가 만료된다면 삭제됨
+- 크기
+  - 로컬스토리지 - 5MB
+  - 쿠키 - 4KB
+- 보안성
+  - 쿠키는 클라이언트 사이드 스크립트에서 접근하는 것을 방지하는 HttpOnly flag, HTTPS 통신에서만 전송되는 Secure flag, CSRF 공격을 방어하는 SameSite attribute가 있음
+  - 로컬스토리지는 보안적으로 이를 막을 수 없기에 그곳에 데이터를 저장하면 몇가지 스텝이 더 필요함
+- Cross-site Scripting (XSS)
+  - 쿠키는 XSS에 취약하지만, 로컬스토리지는 아님
+  - 이 공격으로 페이지에 해로운 스크립트를 넣으면 쿠키에 저장된 데이터에 접근할 수 있음
 
 ##### id값으로 기기 판별하기
+
+```javascript
+navigator.userAgent
+```
+
+- 해당 코드는 브라우저, 운영시스템(OS), 디바이스 타입에 대한 정보를 제공함
+
+- 예시
+
+  - 브라우저 타입(Google Chrome version 89.0.4389.82)
+
+    Chrome/89.0.4389.82
+
+  - OS(64-bit version of Windows 10)
+
+    Windows NT 10.0; Win64; x64
+
+  - 디바이스 타입( Google Pixel 5)
+
+    Mozilla/5.0 (Linux; Android 11; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.82 Mobile Safari/537.36
+
+- 다만, 해당 내용은 유저에 의해서 바뀔 수 있음
