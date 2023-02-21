@@ -1,0 +1,186 @@
+[toc]
+
+# FastAPI
+
+---
+
+## 라이브서버 실행
+
+`uvicorn main:app --reload`
+
+- main : 파일 main.py
+- app : main.py 내부의 app = FastAPI() 줄에서 생성한 오브젝트
+- --reload : 코드 변경 후 서버 재시작, 개발에만 사용
+
+
+
+---
+
+## OpenAPI
+
+- FastAPI는 API를 정의하기 위한 OpenAPI 표준을 사용하여 나의 모든 API를 이용해 '스키마'를 생성함
+  - OpenAPI를 사용하는 이유?
+    - RESTful API를 정의된 규칙에 맞게 API spec을 json이나 yaml로 표현하는 방식
+    - 직접 소스코드나 문서를 보지 않고 서비스를 이해할 수 있다는 장점
+
+### 스키마
+
+- 스키마는 무언가의 정의 또는 설명입니다. 이를 구현하는 코드가 아니라 추상적인 설명
+
+### API '스키마'
+
+- OPENAPI는 API의 스키마를 어떻게 정의하는지 지시하는 규격
+- 스키마 정의는 API 경로, 가능한 매개변수 등 포함
+
+### 데이터 '스키마'
+
+- 스키마라는 용어는 JSON처럼 어떤 데이터의 형태를 나타낼 수도 있음
+- 이러한 경우 JSON 속성, 가지고 있는 데이터 타입 등을 뜻함
+
+### OpenAPI와 JSON 스키마
+
+- OpenAPI는 API에 대한 API 스키마를 정의함
+- 스키마에는 JSON 데이터 스키마의 표준인 JSON 스키마를 사용해 API에서 보내고 받는 데이터 정의를 포함함
+
+
+
+---
+
+## 단계별 요약
+
+### 1단계 : FastAPI 임포트
+
+```python
+from fastapi import FastAPI
+```
+
+- FastAPI는 API에 대한 모든 기능을 제공하는 파이썬 클래스
+- FastAPI는 Starlette를 직접 상속하는 클래스, 모든 기능을 사용할 수 있음
+
+### 2단계 : FastAPI '인스턴스' 생성
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+```
+
+- app 변수는 FastAPI 클래스의 `인스턴스`가 됨
+
+- 모든 API를 생성하기 위한 상호작용의 주요 지점이 될 것
+
+- app은 다음 명령에서 uvicorn이 참조하고 있는 것과 동일
+  ```bash
+  $ uvicorn main:app --reload
+  ```
+
+- 예시
+  ```python
+  from fastapi import FastAPI
+  
+  my_awesome_api = FastAPI()  <----------
+  
+  
+  @my_awesome_api.get("/")
+  async def root():
+      return {"message": "Hello World"}
+  ```
+
+  ```bash
+  $ uvicorn main:my_awesome_api --reload
+  ```
+
+### 3단계 : 경로 동작 생성
+
+#### 경로
+
+- 경로는 첫 번째 `/`에서 시작하는 URL의 마지막 부분을 나타냄
+
+- 경로는 일반적으로 '엔드포인트' 또는 '라우트'라고도 불림
+
+- API를 빌드하는 동안 경로는 '관심사'와 '리소스'를 분리하는 주요 방법
+
+- 예시
+
+  ```
+  https://example.com/items/foo
+  -> /items/foo
+  ```
+
+#### 동작(Operation)
+
+- 동작은 HTTP '메소드' 중 하나를 나타냄
+  - POST, GET, PUT, DELETE
+  - OPTIONS, HEAD, PATCH
+- HTTP 프로토콜에서는 이러한 '메소드'를 하나(또는 이상) 사용하여 각 경로와 통신할 수 있음
+
+#### 경로 동작 데코레이터 정의
+
+```python
+from fastapi import FastAPI
+
+my_awesome_api = FastAPI()
+
+
+@my_awesome_api.get("/")  <-------------
+async def root():
+    return {"message": "Hello World"}
+```
+
+- `@app.get("/")`은 FastAPI에게 바로 아래 있는 함수가 다음으로 이동하는 요청을 처리한다는 것을 알려줌
+- 동작 데코레이터 목록
+  - @app.post()
+  - @app.put()
+  - @app.delete()
+  - @app.options()
+  - @app.head()
+  - @app.patch()
+  - @app.trace()
+
+### 4단계 : 경로 동작 함수 정의
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+async def root():  <--------------------
+    return {"message": "Hello World"}
+```
+
+- 파이썬 함수로 GET동작을 사용하여 URL '/'에 대한 요청을 받을 때마다 FastAPI에 의해 호출됨
+
+- 위의 경우 async 함수
+
+- async 대신 일반 함수로 정의할 수 있음
+
+  ```python
+  from fastapi import FastAPI
+  
+  app = FastAPI()
+  
+  
+  @app.get("/")
+  def root():
+      return {"message": "Hello World"}
+  ```
+
+### 5단계 : 콘텐츠 반환
+
+```python
+from fastapi import FastAPI
+
+app = FastAPI()
+
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}  <--------------
+```
+
+- dict, list, str, int 등을 반환할 수 있음
+- Pydantic 모델을 반환할 수동 ㅣㅆ음
+- JSON으로 자동 변혼되는 객체들과 모델들이 많이 있음(ORM 등 포함)
+
