@@ -329,7 +329,7 @@ export default PatientDetail;
 
 - 브라우저 구조
 
-  ![image-20230226162949204](BOM%20%ED%9A%8C%EA%B3%A0%EB%A1%9D.assets/image-20230226162949204.png)
+  ![img](BOM%20%ED%9A%8C%EA%B3%A0%EB%A1%9D.assets/img-1677455976930-14.png)
 
   - 사용자 인터페이스
 
@@ -384,7 +384,7 @@ export default PatientDetail;
 
     - 실행이 완료되면 다시 HTML 파서로 제어 권한을 넘겨 중지했던 시점으로 돌아가 DOM 생성 재개
 
-      ![img](BOM%20%ED%9A%8C%EA%B3%A0%EB%A1%9D.assets/img-1677397301417-3.png)
+      ![img](BOM%20%ED%9A%8C%EA%B3%A0%EB%A1%9D.assets/img-1677455959506-7-1677455961142-10.png)
 
     - 브라우저는 동기적으로 HTML, CSS, Javascript를 처리
 
